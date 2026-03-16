@@ -1,0 +1,3 @@
+openvino-models/
+*.json
+!results/*.json
