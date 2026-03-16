@@ -1,0 +1,5 @@
+<think>
+
+</think>
+
+The CAP theorem says that in a distributed system, if there's a problem with communication between parts of the system (like a network failure), you can't have both consistency and availability at the same time. You have to choose between ensuring that all parts of the system agree on the correct data (consistency) or making sure the system remains responsive and accessible (availability). This is important because it helps teams design systems that work well under different real-world conditions.

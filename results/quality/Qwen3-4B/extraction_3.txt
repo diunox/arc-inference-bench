@@ -1,0 +1,37 @@
+<think>
+
+</think>
+
+Sure! Here's a Docker Compose YAML snippet that matches your requirements:
+
+```yaml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    container_name: mydb
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret123
+    ports:
+      - "5433:5432"
+    volumes:
+      - mydb_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        memory: 512M
+
+volumes:
+  mydb_data:
+```
+
+### Explanation:
+- **`image: postgres:16`**: Uses PostgreSQL 16 image.
+- **`environment`**: Sets the PostgreSQL user and password.
+- **`ports`**: Maps the container's PostgreSQL port (5432) to port 5433 on the host.
+- **`volumes`**: Uses a volume for persistent storage.
+- **`deploy.resources.memory`**: Limits the container to 512MB of memory.
+- **`container_name`**: Names the container `mydb`.
+
+Let me know if you want it to run in a specific context (e.g., swarm, or with other services).

@@ -1,0 +1,9 @@
+<think>
+
+</think>
+
+There once was a developer,  
+Who thought he knew how to debug.  
+He fixed the code,  
+But the system still broke,  
+And the team had to reboot.

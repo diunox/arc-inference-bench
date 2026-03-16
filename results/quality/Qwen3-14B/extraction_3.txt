@@ -1,0 +1,37 @@
+: 
+
+</think>
+
+Here is the Docker Compose YAML snippet based on your requirements:
+
+```yaml
+version: '3.8'
+
+services:
+  mydb:
+    image: postgres:16
+    container_name: mydb
+    ports:
+      - "5433:5433"
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret123
+    volumes:
+      - mydb_data:/var/lib/postgresql/data
+    mem_limit: 512MB
+    restart: unless-stopped
+
+volumes:
+  mydb_data:
+```
+
+### Explanation:
+- `image: postgres:16`: Uses PostgreSQL 16.
+- `container_name: mydb`: Names the container `mydb`.
+- `ports: "5433:5433"`: Maps host port 5433 to container port 5433.
+- `environment`: Sets the required environment variables.
+- `volumes`: Uses a named volume `mydb_data` for persistent storage.
+- `mem_limit: 512MB`: Limits memory usage to 512MB.
+- `restart: unless-stopped`: Ensures the container restarts unless manually stopped.
+
+Let me know if you want to add more features like a backup or a web interface!

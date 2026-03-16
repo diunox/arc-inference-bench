@@ -1,0 +1,25 @@
+You can achieve this with a combination of `find`, `du`, `sort` and `head` commands. Here is the bash one-liner:
+
+```bash
+find /var/log -type f -exec du -m {} \|\| true; du -m . | sort -hr -t '\t' | head -10
+```
+
+This command works as follows:
+
+1. `find /var/log -type f -exec du -m {} \|\| true;`
+   - `find` locates all files in the `/var/log` directory with the `-type f` flag, which filters only files.
+   - `-exec` executes the `du -m {}` command on each found file to get the size in Megabytes.
+   - `\|\| true;` makes the command sequence work even if one file fails (e.g., missing or not readable). The `true` command does nothing but exist, which ensures that the command sequence continues.
+
+2. `du -m .`
+   - This command gets the size of the current directory (`.`), including itself, in Megabytes.
+
+3. `sort -hr -t '\t'`
+   - Sorts the list of sizes (one line per file) by size in human-readable format and in reverse order (`-hr`) using tab as the delimiter (`-t '\t'`).
+
+4. `head -10`
+   - Displays only the first 10 lines (top 10 largest files) of the sorted list.
+
+Please note that the command only shows files larger than 100MB in total size (due to using `du -m`), but it doesn't guarantee that each individual file is larger than 100MB. If you need to find files larger than 100MB each, you'd need to adjust the command to find files with a size greater than 100000000 bytes (100MB) instead.
+
+Also, the command doesn't handle symbolic links or directories. If you want to include them, add `-type f` before `-exec` and remove it after `-exec`. If you want to exclude them, add `-type f` after `-exec`.

@@ -1,0 +1,58 @@
+```python
+from collections import OrderedDict
+
+class LRUCache:
+  def __init__(self, capacity: int):
+    self.capacity = capacity
+    self.cache: OrderedDict = OrderedDict()
+
+  def get(self, key: int) -> int:
+    if key not in self.cache:
+      return -1
+    else:
+      self.cache.move_to_end(key)  # Move accessed key to the end
+      return self.cache[key]
+
+  def put(self, key: int, value: int) -> None:
+    if key in self.cache:
+      self.cache[key] = value
+      self.cache.move_to_end(key)  # Move updated key to the end
+    else:
+      if len(self.cache) == self.capacity:
+        self.cache.popitem(last=False)  # Remove the least recently used item
+      self.cache[key] = value
+
+
+```
+
+**Explanation:**
+
+1. **Initialization (`__init__`)**:
+   - `capacity`: Stores the maximum number of items the cache can hold.
+   - `cache`: Uses `OrderedDict` to maintain insertion order, crucial for LRU.
+
+2. **`get(key)`**:
+   - Checks if the `key` exists in the `cache`.
+   - If found:
+     - Moves the `key` to the end of the `OrderedDict` (most recently used).
+     - Returns the corresponding `value`.
+   - If not found, returns -1.
+
+3. **`put(key, value)`**:
+   - If the `key` already exists:
+     - Updates the `value` associated with the `key`.
+     - Moves the `key` to the end of the `OrderedDict`.
+   - If the `key` is new:
+     - Checks if the cache is full (`len(self.cache) == self.capacity`).
+     - If full, removes the least recently used item (the one at the beginning of the `OrderedDict`) using `popitem(last=False)`.
+     - Inserts the new `key` and `value` into the `cache`.
+
+**Key Points:**
+
+- **`OrderedDict`**: This data structure is essential for LRU implementation because it remembers the order of item insertion.
+- **Moving to End**: When a key is accessed (in `get`) or updated (in `put`), it's moved to the end of the `OrderedDict`, effectively marking it as the most recently used.
+- **`popitem(last=False)`**: This method removes the oldest item from the `OrderedDict` (the one at the beginning).
+
+
+
+Let me know if you have any other questions.

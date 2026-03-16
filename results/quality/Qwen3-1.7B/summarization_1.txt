@@ -1,0 +1,5 @@
+<think>
+
+</think>
+
+The CAP theorem says that in a distributed system, you can't have all three of the following at the same time: consistency, availability, and partition tolerance. It helps explain trade-offs between these properties when designing systems that need to handle multiple requests.

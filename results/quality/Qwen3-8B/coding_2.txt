@@ -1,0 +1,17 @@
+<think>
+
+</think>
+
+Here's a bash one-liner that does what you're asking:
+
+```bash
+du -h /var/log/* | grep -v 'total' | sort -hr | head -n 10
+```
+
+### Explanation:
+- `du -h /var/log/*`: Lists the disk usage (with human-readable sizes) for all files in `/var/log`.
+- `grep -v 'total'`: Removes any lines that contain the word "total" (e.g., from directory summaries).
+- `sort -hr`: Sorts the output numerically in reverse (descending) order, using human-readable sizes.
+- `head -n 10`: Shows only the top 10 largest files.
+
+> ⚠️ Note: This works for files, not directories. If you want to include directories, you might need to use `find` instead of `du`. Let me know if you'd like that version too.

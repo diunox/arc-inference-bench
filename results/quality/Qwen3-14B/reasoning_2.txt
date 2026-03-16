@@ -1,0 +1,70 @@
+: 
+
+</think>
+
+This is a classic logic puzzle. Let's break it down step by step.
+
+### Given:
+- There are **three boxes**.
+- Each box is **labeled**: **Apples**, **Oranges**, and **Mixed**.
+- **All labels are wrong** (i.e., **no box has the correct label**).
+- You can **pick one fruit from one box**.
+- Based on that, you must **determine which box contains what**.
+
+---
+
+### Goal:
+Determine **which box to pick from** to correctly identify the contents of all boxes.
+
+---
+
+### Key Insight:
+Since **all labels are wrong**, we can deduce the following:
+
+- The **Mixed** box **cannot** be mixed — it must be **all apples** or **all oranges**.
+- The **Apples** box **cannot** be all apples — it must be **oranges** or **mixed**.
+- The **Oranges** box **cannot** be all oranges — it must be **apples** or **mixed**.
+
+---
+
+### Strategy:
+The trick is to **pick from the box labeled "Mixed"**.
+
+### Why?
+
+Because:
+- Since **all labels are wrong**, the **"Mixed"** box **cannot** be mixed — it must be **all apples or all oranges**.
+- Let’s say you **pick one fruit** from the **Mixed** box.
+
+#### Case 1: You pick an **apple** from the Mixed box.
+- That means the **Mixed** box is **actually all apples**.
+- So the label "Mixed" is wrong → it’s really **Apples**.
+- The label "Apples" is also wrong, so it cannot be apples → it must be **Oranges** or **Mixed**.
+- The label "Oranges" is also wrong → it can’t be oranges → it must be **Apples** or **Mixed**.
+
+Now we know:
+
+- **Mixed** box is actually **Apples** (since we picked an apple from it).
+- That means the **Apples** box cannot be apples → it must be **Oranges** or **Mixed**.
+- But **Mixed** is already apples, so the **Apples** box must be **Oranges**.
+- Therefore, the **Oranges** box must be **Mixed**.
+
+#### Case 2: You pick an **orange** from the Mixed box.
+- Then the **Mixed** box is actually **Oranges**.
+- The **Oranges** label is wrong → it can’t be oranges → it must be **Apples** or **Mixed**.
+- The **Apples** label is wrong → it can’t be apples → it must be **Oranges** or **Mixed**.
+- Then you can deduce the rest accordingly.
+
+---
+
+### ✅ Conclusion:
+**Pick a fruit from the box labeled "Mixed"**.
+
+This is the **correct choice** because:
+- The **Mixed** box is guaranteed to be **all apples or all oranges**, so picking from it gives you definite information.
+- Once you know what's in that box, you can deduce the rest based on the incorrect labels.
+
+---
+
+### ✅ Final Answer:
+**Pick a fruit from the box labeled "Mixed"**, because it is guaranteed to be either all apples or all oranges (not mixed), and that gives you the key to identifying all boxes.

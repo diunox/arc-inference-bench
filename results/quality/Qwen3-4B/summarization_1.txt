@@ -1,0 +1,5 @@
+<think>
+
+</think>
+
+The CAP theorem says that in a distributed system, you can't have all three of consistency, availability, and partition tolerance at the same time. You have to choose two of them, and sometimes you have to sacrifice one to keep the system working well, even when things go wrong. This means that when designing a system, you have to decide which of these three goals is most important for your use case.

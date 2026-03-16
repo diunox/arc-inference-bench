@@ -1,0 +1,5 @@
+1. Resource efficiency: Docker containers share the host system's resources, while Virtual Machines (VMs) run a full operating system and require more resources.
+
+2. Startup time: Containers start faster than VMs because they don't need to boot an entire OS. This makes container development and deployment more agile.
+
+3. Isolation level: VMs provide stronger isolation, as they run their own operating system and applications, while containers share the host's OS kernel, making them less isolated but more lightweight.

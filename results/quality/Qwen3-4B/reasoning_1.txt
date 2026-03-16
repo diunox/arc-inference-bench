@@ -1,0 +1,41 @@
+<think>
+
+</think>
+
+We are given:
+
+- **5 machines take 5 minutes to make 5 widgets.**
+
+We are asked:
+
+- **How long would it take 100 machines to make 100 widgets?**
+
+---
+
+### Step 1: Understand the rate of production
+
+From the given information:
+
+- 5 machines make **5 widgets in 5 minutes**.
+
+This means:
+
+- **1 machine makes 1 widget in 5 minutes**.
+
+So, the **rate of production per machine is 1 widget per 5 minutes**.
+
+---
+
+### Step 2: Find the time for 100 machines to make 100 widgets
+
+If **1 machine makes 1 widget in 5 minutes**, then:
+
+- **100 machines can make 100 widgets in the same amount of time**, because each machine is making 1 widget in 5 minutes.
+
+So, **100 machines can make 100 widgets in 5 minutes**.
+
+---
+
+### Final Answer:
+
+**It would take 100 machines 5 minutes to make 100 widgets.**

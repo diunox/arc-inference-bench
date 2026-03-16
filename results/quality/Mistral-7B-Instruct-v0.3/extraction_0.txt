@@ -1,0 +1,17 @@
+{
+  "web_server": {
+    "ip_address": "192.168.1.10",
+    "port": ["443", "80"],
+    "protocol": ["HTTPS", "HTTP"]
+  },
+  "database": {
+    "ip_address": "10.0.0.5",
+    "port": "5432",
+    "protocol": "PostgreSQL"
+  },
+  "monitoring": {
+    "ip_address": "172.16.0.1",
+    "port": "9090",
+    "protocol": "Prometheus"
+  }
+}

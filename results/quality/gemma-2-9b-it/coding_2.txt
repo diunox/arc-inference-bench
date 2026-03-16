@@ -1,0 +1,24 @@
+```bash
+find /var/log -size +100M -printf "%s %p\n" | sort -rh -n | awk '{printf "%s %s\n", human readable size, $2}' | head -n 10
+```
+
+**Explanation:**
+
+* **`find /var/log -size +100M -printf "%s %p\n"`**:
+    * `find /var/log`: Searches the `/var/log` directory.
+    * `-size +100M`: Finds files larger than 100MB.
+    * `-printf "%s %p\n"`: Prints the file size in bytes (`%s`) and the file path (`%p`) for each match, separated by a space and a newline.
+* **`sort -rh -n`**:
+    * `sort`: Sorts the output.
+    * `-r`: Reverses the order (descending).
+    * `-h`: Sorts human-readable sizes (e.g., 1K, 10M, 1G).
+    * `-n`: Sorts numerically.
+* **`awk '{printf "%s %s\n", human readable size, $2}'`**:
+    * `awk`: Processes the sorted output.
+    * `printf "%s %s\n"`: Prints the human-readable file size and the file path.
+* **`head -n 10`**:
+    * `head`: Displays the first 10 lines of the output.
+
+
+
+Let me know if you have any other bash one-liners you'd like help with!

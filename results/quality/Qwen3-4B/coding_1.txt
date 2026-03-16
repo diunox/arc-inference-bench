@@ -1,0 +1,65 @@
+<think>
+
+</think>
+
+Here's a simple implementation of an **LRU (Least Recently Used) Cache** class in Python, with `get()` and `put()` methods, and type hints included:
+
+```python
+from collections import OrderedDict
+from typing import Any, Union, Optional
+
+class LRUcache:
+    def __init__(self, capacity: int):
+        self.cache = OrderedDict()
+        self.capacity = capacity
+
+    def get(self, key: Any) -> Optional[Any]:
+        """Get the value associated with the given key. If the key exists, it is moved to the end (most recently used)."""
+        if key in self.cache:
+            self._move_to_end(key)
+            return self.cache[key]
+        return None
+
+    def put(self, key: Any, value: Any) -> None:
+        """Insert or update the key-value pair. If the key exists, it is moved to the end (most recently used). If the cache is full, remove the least recently used item (the first item in the ordered dict)."""
+        if key in self.cache:
+            self._move_to_end(key)
+            self.cache[key] = value
+        else:
+            if len(self.cache) >= self.capacity:
+                self.cache.popitem(last=False)
+            self.cache[key] = value
+
+    def _move_to_end(self, key: Any) -> None:
+        """Move the key to the end of the ordered dict (marking it as most recently used)."""
+        if key in self.cache:
+            del self.cache[key]
+            self.cache[key] = value
+
+    def __str__(self) -> str:
+        return f"LRUCache({self.cache})"
+```
+
+### Example Usage:
+
+```python
+cache = LRUcache(3)
+
+cache.put(1, "one")
+cache.put(2, "two")
+cache.put(3, "three")
+cache.put(4, "four")  # Evicts 1
+
+print(cache.get(1))  # Output: None
+print(cache.get(2))  # Output: 'two'
+print(cache.get(3))  # Output: 'three'
+print(cache.get(4))  # Output: 'four'
+```
+
+### Notes:
+
+- The `OrderedDict` is used to maintain the order of insertion (LRU order).
+- The `get()` method moves the key to the end if it exists, marking it as most recently used.
+- The `put()` method handles both insertion and updates, and evicts the least recently used item if the cache is full.
+
+Let me know if you'd like a version using a dictionary and a doubly linked list (for better performance in some cases).

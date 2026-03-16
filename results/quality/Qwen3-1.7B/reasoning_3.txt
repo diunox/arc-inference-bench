@@ -1,0 +1,44 @@
+<think>
+
+</think>
+
+Let's break this down step by step.
+
+We are told:
+
+- The **bat and the ball together cost $1.10**.
+- The **bat costs $1.00 more than the ball**.
+
+Let’s define the cost of the ball as **$x**.
+
+Then, the cost of the bat is **$x + $1.00**.
+
+Now, the total cost is:
+
+$$
+\text{Ball} + \text{Bat} = x + (x + 1) = 2x + 1
+$$
+
+We are told the total is $1.10, so:
+
+$$
+2x + 1 = 1.10
+$$
+
+Subtract 1 from both sides:
+
+$$
+2x = 0.10
+$$
+
+Divide by 2:
+
+$$
+x = 0.05
+$$
+
+So, the **ball costs $0.05**.
+
+---
+
+**Answer:** The ball costs **$0.05**.

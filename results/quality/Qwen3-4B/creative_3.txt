@@ -1,0 +1,9 @@
+<think>
+
+</think>
+
+There once was a dev who was tense,  
+Who spent nights to fix a production mess.  
+With a coffee in hand,  
+He debugged with a band,  
+And fixed the outage in just one day.

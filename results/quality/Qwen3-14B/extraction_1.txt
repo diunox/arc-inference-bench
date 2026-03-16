@@ -1,0 +1,16 @@
+<think>
+
+</think>
+
+Here's the parsed server log entry in structured JSON format:
+
+```json
+{
+  "timestamp": "2024-03-15T14:32:01.445Z",
+  "level": "ERROR",
+  "service": "auth-service",
+  "message": "Failed login attempt for user admin@example.com from IP 203.0.113.42 - account locked after 5 attempts"
+}
+``` 
+
+Let me know if you'd like to extract additional details like the user email, IP address, or number of attempts into separate fields!

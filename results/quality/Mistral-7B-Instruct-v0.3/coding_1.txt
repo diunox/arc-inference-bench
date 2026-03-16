@@ -1,0 +1,39 @@
+Here's a simple implementation of an LRU Cache class in Python using a doubly-linked list and a dictionary for fast access. The class has `get()` and `put()` methods.
+
+```python
+from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cache = OrderedDict()
+        self.capacity = capacity
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        value = self.cache.pop(key)
+        self.cache[key] = value  # Move the accessed item to the end of the cache (LRU order)
+        return value
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.cache.pop(key)  # Remove the existing item from the cache
+        elif len(self.cache) >= self.capacity:
+            # Remove the least recently used item (the first item in the dictionary)
+            oldest_key = self.cache.popitem(last=False)
+        self.cache[key] = value  # Add the new item to the cache (LRU order)
+
+# Usage example:
+cache = LRUCache(3)
+
+cache.put(1, 1)
+cache.put(2, 2)
+cache.put(3, 3)
+print(cache.get(1))  # Returns 1
+cache.put(4, 4)       # Evicts key 2
+print(cache.get(2))  # Returns -1 (not found)
+print(cache.get(3))  # Returns 3
+print(cache.get(4))  # Returns 4
+```
+
+This code uses `collections.OrderedDict` to maintain the LRU order and the items in the cache. The `get()` and `put()` methods handle the necessary operations to keep the cache up-to-date with respect to the LRU policy. The example demonstrates the usage of the `LRUCache` class with some basic operations.

@@ -1,0 +1,7 @@
+<think>
+
+</think>
+
+- **Docker containers** share the host OS kernel, making them lightweight and faster to start compared to virtual machines.  
+- **Virtual machines** run a full guest OS, which makes them more resource-heavy but provides better isolation.  
+- Docker containers are ideal for consistent app environments, while virtual machines are better for running multiple OS environments.

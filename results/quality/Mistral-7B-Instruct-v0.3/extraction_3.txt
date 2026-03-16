@@ -1,0 +1,24 @@
+Here's a Docker Compose YAML snippet for the given requirements:
+
+```yaml
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    container_name: mydb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=secret123
+      - POSTGRES_DB=mydb
+    restart: always
+    memory: 512mb
+
+volumes:
+  postgres_data:
+```
+
+In this example, I changed the PostgreSQL default port from 5432 to 5433, set the persistent storage with the `volumes` section, and limited the memory to 512 MB using the `memory` key. The environment variables are set with the `environment` key, and the database name is specified as `POSTGRES_DB`.

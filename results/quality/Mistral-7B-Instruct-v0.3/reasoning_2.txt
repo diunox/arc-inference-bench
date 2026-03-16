@@ -1,0 +1,7 @@
+If all labels are wrong, then the box labeled 'Mixed' cannot contain mixed fruits. Since all other boxes are labeled 'Apples' or 'Oranges', the 'Mixed' box must contain either Apples or Oranges.
+
+Since it's impossible to have a box of mixed fruits, the box labeled 'Mixed' must hold either apples or oranges. To make progress towards finding the correct box, you should pick a fruit from the 'Mixed' box.
+
+Let's say the fruit you pick from the 'Mixed' box is an Apple. Now you know that the 'Mixed' box actually contains Apples (since all labels are wrong). Since the labels are incorrect, the box labeled 'Apples' must contain Oranges, and the box labeled 'Oranges' must contain Mixed fruits.
+
+So, to find the correct box of apples, you should pick a fruit from the box labeled 'Oranges'. The reasoning is that the box labeled 'Apples' cannot contain apples, and the box labeled 'Mixed' does contain apples, leaving only the 'Oranges' box as the possible location for apples.

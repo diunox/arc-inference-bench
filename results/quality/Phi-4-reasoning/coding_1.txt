@@ -1,0 +1,100 @@
+<think>User is asking: "Implement a simple LRU cache class in Python with get() and put() methods. Include type hints." We need to produce Python code implementing a simple LRU cache class with get() and put() methods. Use type hints. Let's produce code. I'll produce code that is straightforward and simple. We can use dictionary and collections.OrderedDict maybe. But Python's collections.OrderedDict is LRU friendly. But I'll produce code that uses OrderedDict. But then code: class LRUCache: __init__(self, capacity: int) -> None. I'll produce code that uses OrderedDict from collections. But then we need to provide get() and put() methods.
+
+I'll produce code:
+```
+from collections import OrderedDict
+from typing import Any, Optional
+
+class LRUCache:
+    def __init__(self, capacity: int) -> None:
+        self.capacity = capacity
+        self.cache = OrderedDict()
+
+    def get(self, key: Any) -> Optional[Any]:
+        if key not in self.cache:
+            return None
+        value = self.cache.pop(key)
+        self.cache[key] = value  # reinsert as most recent
+        return value
+
+    def put(self, key: Any, value: Any) -> None:
+        if key in self.cache:
+            self.cache.pop(key)
+        elif len(self.cache) >= self.capacity:
+            self.cache.popitem(last=False) # pop least recently used
+        self.cache[key] = value
+```
+That is straightforward.
+
+I'll produce code accordingly.
+
+I'll produce final code with explanation. Also I'll produce a sample usage at bottom.
+
+I'll produce code with type hints for get and put.
+
+I'll produce code with type hints.
+
+I'll produce code with explanation.
+
+I'll produce code accordingly.
+
+I'll produce final answer.</think>Below is one way to implement a simple LRU cache in Python using an OrderedDict. The OrderedDict allows us to keep track of the insertion order so that the least recently used item (at the beginning) can be removed when the cache exceeds its capacity.
+
+------------------------------------------------------------
+from collections import OrderedDict
+from typing import Any, Optional
+
+class LRUCache:
+    def __init__(self, capacity: int) -> None:
+        """
+        Initialize the LRU cache with a fixed capacity.
+        :param capacity: Maximum number of items that can be stored.
+        """
+        self.capacity: int = capacity
+        self.cache: OrderedDict[Any, Any] = OrderedDict()
+
+    def get(self, key: Any) -> Optional[Any]:
+        """
+        Retrieve an item from the cache by key.
+        If the key exists, move it to the end to mark it as recently used.
+        :param key: The key of the item to retrieve.
+        :return: The value associated with the key if it exists, otherwise None.
+        """
+        if key not in self.cache:
+            return None
+        # Move the key to the end to mark it as recently used.
+        value = self.cache.pop(key)
+        self.cache[key] = value
+        return value
+
+    def put(self, key: Any, value: Any) -> None:
+        """
+        Insert or update the value for a given key.
+        If the cache is at capacity, remove the least recently used item.
+        :param key: The key for the item.
+        :param value: The value to be associated with the key.
+        """
+        if key in self.cache:
+            # Remove the old entry and add it again to mark it as recently used.
+            self.cache.pop(key)
+        elif len(self.cache) >= self.capacity:
+            # Remove the least recently used item (first item in OrderedDict).
+            self.cache.popitem(last=False)
+        self.cache[key] = value
+
+# Example usage:
+if __name__ == "__main__":
+    cache = LRUCache(3)
+    cache.put("a", 1)
+    cache.put("b", 2)
+    cache.put("c", 3)
+    
+    print(cache.get("a"))  # Output: 1, and "a" becomes recently used.
+    cache.put("d", 4)      # "b" will be evicted because it is the least recently used.
+    
+    print(cache.get("b"))  # Output: None (since "b" was evicted)
+    print(cache.get("c"))  # Output: 3
+    print(cache.get("d"))  # Output: 4
+------------------------------------------------------------
+
+This implementation provides type hints for better clarity and uses Python's built-in OrderedDict to efficiently manage the order of keys.

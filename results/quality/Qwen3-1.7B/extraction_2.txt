@@ -1,0 +1,21 @@
+<think>
+
+</think>
+
+{
+  "name": "Quick Pasta",
+  "prep_time": "20 min",
+  "ingredients": [
+    "200g spaghetti",
+    "2 cloves garlic",
+    "olive oil",
+    "salt",
+    "red pepper flakes"
+  ],
+  "steps": [
+    "Boil pasta until al dente.",
+    "Sauté garlic in oil for 2 min.",
+    "Toss pasta with garlic oil.",
+    "Season and serve."
+  ]
+}

@@ -1,0 +1,10 @@
+<think>
+
+</think>
+
+| **Aspect**            | **Microservices**                          | **Monolithic Architecture**                  |
+|-----------------------|--------------------------------------------|---------------------------------------------|
+| **Scalability**        | High (easier to scale individual services) | Low (scaling requires entire application)     |
+| **Deployment**        | Easy (can deploy individual services)      | Complex (requires deploying entire app)     |
+| **Maintainability**    | Better (modular, easier to update/patch)  | Worse (changes in one part affect others)    |
+| **Development Speed**  | Faster (parallel development, faster feedback) | Slower (all code must be developed together) |

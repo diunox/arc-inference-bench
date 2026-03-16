@@ -1,0 +1,32 @@
+Okay, I need to write a bash one-liner that finds all files larger than 100MB in the /var/log directory, sorts them by size in descending order, and then shows the top 10 with human-readable sizes. Hmm, let me break this down step by step.
+
+First, I remember that the `find` command is useful for searching files. So I'll start with `find /var/log`. I need to find files larger than 100MB. The `-size` option in `find` can be used for this. But wait, the syntax is a bit tricky. I think `-size +100M` would select files larger than 100MB. So the command so far is `find /var/log -size +100M`.
+
+Next, I need to sort these files by their size in descending order. The `sort` command can do this. Since I want to sort by size, I can use `-k 1,1` to sort based on the first field. But I need to sort in reverse order, so I'll add `-r`. So the sorting part would be `sort -r -k 1,1`. But wait, how does `sort` get the size information? Oh right, because `ls -l` gives the size in bytes, so if I pipe the output of `find` to `ls -l`, I can get the size.
+
+Putting it together, I can do `find /var/log -size +100M -exec ls -l {} \;`. This will list each file with its size in bytes. Then, I can sort this list by the size column. So I'll pipe it into `sort -r -k 1,1`, which sorts in reverse order based on the first column (size).
+
+Now, I want to show only the top 10 entries. So I'll use `head -n 10` at the end. That way, after sorting, only the first 10 lines are displayed.
+
+But the sizes are in bytes, and I want them in a more readable format like MB or GB. I can use `awk` to format the size. The `ls -l` output has the size as the fifth field (index 4 if starting from 0). So I can use `awk '{ print $5/1024/1024 "M", $9 }'` to convert bytes to megabytes and keep the filename.
+
+Putting it all together, the command would be:
+
+```
+find /var/log -size +100M -exec ls -l {} \; | awk '{ print $5/1024/1024 "M", $9 }' | sort -r | head -n 10
+```
+
+Wait, let me check if I got the columns right. `ls -l` outputs the size as the fifth field, so $5 is the size in bytes. Dividing by 1024 twice gives MB. Then, I print the size in MB and the filename ($9). After that, I sort in reverse order, and take the top 10.
+
+Alternatively, I could use `du -h` to get human-readable sizes. Maybe a better approach is to use `du` instead of `ls`. So another way is to list the directories with `du`, but I think the initial approach with `find` and `ls` is clearer.
+
+I think that's it. The command should find all files over 100MB, list their sizes in MB, sort them from largest to smallest, and show the top 10.
+</think>
+
+Here's the bash one-liner that accomplishes the task:
+
+```bash
+find /var/log -type f -size +100M -exec ls -l {} \; | awk '{ print $5/1024/1024 "M", $9 }' | sort -r | head -n 10
+```
+
+This command finds all files (`-type f`) larger than 100MB in /var/log, lists their sizes in bytes, converts the size to megabytes using `awk`, sorts them in descending order, and shows the top 10 files.

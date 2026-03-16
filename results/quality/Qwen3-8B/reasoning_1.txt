@@ -1,0 +1,48 @@
+<think>
+
+</think>
+
+Let's break this problem down step by step.
+
+---
+
+### **Given:**
+- 5 machines take **5 minutes** to make **5 widgets**.
+
+---
+
+### **Step 1: Determine the rate of production per machine.**
+
+We are told that 5 machines make 5 widgets in 5 minutes.
+
+So, in **5 minutes**, **5 machines make 5 widgets**.
+
+That means:
+
+- Each machine makes **1 widget in 5 minutes**.
+
+So the **rate per machine is: 1 widget per 5 minutes**.
+
+---
+
+### **Step 2: Now consider 100 machines.**
+
+If each machine makes **1 widget every 5 minutes**, then:
+
+- In 5 minutes, **100 machines** would make **100 widgets**.
+
+---
+
+### **Final Answer:**
+
+It would take **5 minutes** for **100 machines** to make **100 widgets**.
+
+---
+
+### **Key Insight:**
+
+The number of machines is directly proportional to the number of widgets produced in the same amount of time. So if you double the number of machines, you double the number of widgets produced in the same time.
+
+---
+
+✅ **Answer:** It would take **5 minutes** for 100 machines to make 100 widgets.

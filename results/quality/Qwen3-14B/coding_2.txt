@@ -1,0 +1,18 @@
+: 
+
+</think>
+
+Here's a bash one-liner that finds all files larger than 100MB in `/var/log`, sorts them by size in descending order, and shows the top 10 with human-readable sizes:
+
+```bash
+find /var/log -type f -size +100M -exec du -sh {} + | sort -hr | head -n 10
+```
+
+### Explanation:
+
+- `find /var/log -type f -size +100M`: Finds all files (`-type f`) larger than 100MB (`-size +100M`) in `/var/log`.
+- `-exec du -sh {} +`: Executes `du -sh` (show human-readable size) on the found files. The `{}` is replaced with the file names, and `+` tells `find` to pass as many files as possible to `du` at once.
+- `sort -hr`: Sorts the output by size in descending order (`-h` for human-readable, `-r` for reverse).
+- `head -n 10`: Shows the top 10 results.
+
+This one-liner is efficient and works well in most Unix-like environments.

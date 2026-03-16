@@ -1,0 +1,7 @@
+Each day, the snail effectively climbs 1 foot (climbs 3 feet and doesn't slide back during the night) and slides back 2 feet at night. So, the net gain per day is 1 foot - 2 feet = -1 foot (or -10 feet per 10 days since we're working with feet).
+
+However, the problem states that on the 30th foot, the snail will reach the top without sliding back because it's already there. So, we don't have to account for the final foot in our calculations.
+
+Thus, if we ignore the final foot, it will take the snail 29 days to climb the wall (29 days to climb 29 feet and reach the 30th foot, where it doesn't slide back). But since the snail effectively climbs 1 foot per day, it takes 30 days for the snail to reach the top of the wall.
+
+Therefore, it takes 30 days for the snail to reach the top of the 30-foot wall.

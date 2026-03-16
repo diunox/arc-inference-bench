@@ -1,0 +1,7 @@
+: 
+
+</think>
+
+- **Docker containers share the host OS kernel**, making them lightweight and fast to start, while **virtual machines run a full guest OS**, which makes them heavier and slower.  
+- **Containers are application-focused**, packaging only the app and its dependencies, whereas **virtual machines virtualize the entire system**, including the OS and hardware.  
+- **Docker uses less system resources** and is ideal for development and scaling, while **virtual machines offer full system isolation** and are better for running different OS environments.

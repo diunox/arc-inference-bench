@@ -1,0 +1,38 @@
+<think>
+
+</think>
+
+We are told that a snail climbs **3 feet during the day** and **slides back 2 feet at night**, and the wall is **30 feet high**.
+
+---
+
+### Step-by-step:
+
+1. **Net gain per day**:
+   - The snail climbs 3 feet during the day.
+   - Then it slides back 2 feet at night.
+   - So, the net gain per day is:
+     $$
+     3 - 2 = 1 \text{ foot per day}
+     $$
+
+2. **But on the final day**, the snail doesn't slide back. That is, if the snail reaches or exceeds the top during the day, it doesn't slide back.
+
+3. **So, in the last day**, the snail only needs to climb 3 feet to reach the top.
+
+---
+
+### Let's calculate how many days it takes:
+
+- Each day, the snail makes a net gain of 1 foot.
+- After 27 days, the snail has climbed 27 feet.
+- On the 28th day, the snail climbs 3 feet, which brings it to:
+  $$
+  27 + 3 = 30 \text{ feet}
+  $$
+
+---
+
+### ✅ Final Answer:
+
+**28 days**.

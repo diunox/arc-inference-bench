@@ -1,0 +1,53 @@
+<think>
+
+</think>
+
+Here is the Docker Compose YAML snippet based on your natural language description:
+
+```yaml
+version: '3.8'
+
+services:
+  mydb:
+    image: postgres:16
+    container_name: mydb
+    ports:
+      - "5433:5432"
+    volumes:
+      - mydb_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret123
+    mem_limit: 512m
+```
+
+### Explanation:
+- **`image: postgres:16`**: Uses PostgreSQL 16.
+- **`container_name: mydb`**: Names the container `mydb`.
+- **`ports: "5433:5432"`**: Maps the container's PostgreSQL port (5432) to port 5433 on the host.
+- **`volumes`**: Mounts a named volume `mydb_data` to the PostgreSQL data directory for persistent storage.
+- **`environment`**: Sets the PostgreSQL user and password.
+- **`mem_limit: 512m`**: Limits the container's memory to 512MB.
+
+### Note:
+To use the volume, you need to define it in the `volumes` section. Here's the full version with the volume defined:
+
+```yaml
+version: '3.8'
+
+services:
+  mydb:
+    image: postgres:16
+    container_name: mydb
+    ports:
+      - "5433:5432"
+    volumes:
+      - mydb_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret123
+    mem_limit: 512m
+
+volumes:
+  mydb_data:
+```

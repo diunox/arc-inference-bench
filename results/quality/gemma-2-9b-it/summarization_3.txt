@@ -1,0 +1,2 @@
+HTTPS is crucial for protecting sensitive information transmitted online, like passwords and credit card details, by encrypting the communication between your browser and a website using TLS (Transport Layer Security). During a TLS handshake, your browser and the website establish a secure connection. They exchange digital certificates to verify each other's identities and agree on encryption algorithms. Finally, they generate a shared secret key, allowing all future data to be encrypted and decrypted securely. 
+

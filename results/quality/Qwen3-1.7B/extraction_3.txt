@@ -1,0 +1,28 @@
+<think>
+
+</think>
+
+```yaml
+version: '3'
+services:
+  mydb
+  image: postgres:16
+  environment:
+    POSTGRES_USER: app
+    POSTGRES_PASSWORD: secret123
+  ports:
+    - "5433:5432"
+  memory:
+    limit: 512MB
+  volumes:
+    - mydb-data:/var/lib/postgresql/data
+  volumes_from:
+    - mydb-data
+```
+
+This Docker Compose file sets up a PostgreSQL 16 database service named `mydb` with the specified configuration. It includes:
+- The `postgres:16` image
+- The `POSTGRES_USER` and `POSTGRES_PASSWORD` environment variables
+- A `5433:5432` port mapping
+- A `512MB` memory limit
+- Persistent storage using a volume named `mydb-data` (you should create the volume before running this)

@@ -1,0 +1,34 @@
+First, I need to determine the rate at which each machine produces widgets. Given that 5 machines take 5 minutes to produce 5 widgets, I can calculate the rate per machine.
+
+By dividing the total number of widgets by the total number of machines and the time, I find that each machine produces 1 widget in 5 minutes.
+
+Next, to find out how long it takes 100 machines to produce 100 widgets, I observe that each machine can produce 1 widget in 5 minutes. Therefore, with 100 machines working simultaneously, each machine produces 1 widget in 5 minutes, resulting in a total of 100 widgets produced in the same time frame.
+
+Thus, it takes 5 minutes for 100 machines to make 100 widgets.
+</think>
+
+**Solution:**
+
+Let's break down the problem step by step.
+
+1. **Understanding the Given Information:**
+   - **5 machines** take **5 minutes** to produce **5 widgets**.
+
+2. **Determine the Rate of Production per Machine:**
+   - If 5 machines produce 5 widgets in 5 minutes, then each machine produces 1 widget in 5 minutes.
+     \[
+     \text{Rate per machine} = \frac{5 \text{ widgets}}{5 \text{ machines} \times 5 \text{ minutes}} = \frac{1 \text{ widget}}{5 \text{ minutes}}
+     \]
+
+3. **Calculate Time for 100 Machines to Make 100 Widgets:**
+   - Each machine produces **1 widget in 5 minutes**.
+   - With **100 machines**, each machine can produce **1 widget in 5 minutes**.
+   - Therefore, **100 machines** can produce **100 widgets** in **5 minutes**.
+     \[
+     \text{Time} = \frac{100 \text{ widgets}}{100 \text{ machines} \times \frac{1 \text{ widget}}{5 \text{ minutes}}} = 5 \text{ minutes}
+     \]
+
+**Final Answer:**
+\[
+\boxed{5 \text{ minutes}}
+\]

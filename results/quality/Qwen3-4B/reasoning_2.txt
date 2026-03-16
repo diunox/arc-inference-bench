@@ -1,0 +1,110 @@
+<think>
+
+</think>
+
+You are told that all the labels on the boxes are **wrong**. The boxes are labeled:
+
+- **Apples**
+- **Oranges**
+- **Mixed**
+
+Your task is to **pick one fruit from one box** and determine **which box you must pick from** to figure out the correct contents of all the boxes.
+
+---
+
+### Step 1: Understand the problem
+
+- All labels are **wrong**.
+- So, the box labeled "Apples" does **not** contain only apples.
+- The box labeled "Oranges" does **not** contain only oranges.
+- The box labeled "Mixed" does **not** contain a mix of apples and oranges.
+
+We are told that **you can pick one fruit from one box**. That means you can **take one fruit out** from a box and **see what it is** (apple or orange), and based on that, you can **deduce the contents of all boxes**.
+
+---
+
+### Step 2: Think about the logic
+
+Since all labels are wrong, we can use this to deduce the real contents of each box.
+
+Let’s consider the **Mixed** box first.
+
+### Key Insight:
+
+- The **Mixed** box is labeled "Mixed", but it **cannot** contain both apples and oranges.
+- Therefore, the **Mixed** box must contain **only apples** or **only oranges**.
+- But since the label is wrong, it **cannot** contain a mix.
+
+So, the **Mixed** box must contain **only apples** or **only oranges**.
+
+But that still doesn’t help us directly. Let’s try a different approach.
+
+### Step 3: Try picking from the **Mixed** box
+
+You pick a fruit from the **Mixed** box. Since the label is wrong, it can't be a mix. So, if you pick an **apple**, that means the **Mixed** box actually contains **only apples**.
+
+But wait — that would mean the **Mixed** box is labeled "Mixed" but contains only apples. That's a contradiction. So the **Mixed** box **must contain only apples or only oranges**.
+
+Wait — but that contradicts the fact that the label is wrong. If the label is "Mixed", but the box is actually **only apples**, then the label is wrong. That works.
+
+So, if you **pick a fruit from the Mixed box**:
+
+- If you pick an **apple**, then the **Mixed box is actually all apples**.
+- If you pick an **orange**, then the **Mixed box is actually all oranges**.
+
+This is a key insight.
+
+Now, let's analyze the implications.
+
+### Step 4: Use the result from the Mixed box
+
+Suppose you pick a **fruit from the Mixed box**:
+
+- If it's an **apple**, then the **Mixed box is all apples**.
+- Then, the **Apples box** is labeled "Apples", but that’s wrong. So it can't be all apples. So it must be **all oranges**.
+- The **Oranges box** is labeled "Oranges", but that’s wrong. So it can't be all oranges. So it must be **mixed**.
+
+But wait — the **Mixed box** is already determined to be **all apples**.
+
+So, that would mean the **Oranges box** is **mixed**, and the **Apples box** is **all oranges**.
+
+But that contradicts the fact that the **Mixed box is labeled "Mixed" but is actually all apples**.
+
+So this is a problem.
+
+Wait — the **Mixed box** is labeled "Mixed" but contains only apples. That is allowed, because the label is wrong.
+
+So the **Mixed box** is actually **all apples**.
+
+Then:
+
+- The **Apples box** is labeled "Apples", but that’s wrong, so it can’t be all apples. So it must be **all oranges**.
+- The **Oranges box** is labeled "Oranges", but that’s wrong, so it can’t be all oranges. So it must be **mixed**.
+
+That works!
+
+So:
+
+- **Mixed box** is actually **all apples**.
+- **Apples box** is actually **all oranges**.
+- **Oranges box** is actually **mixed**.
+
+### ✅ Final Answer:
+
+You should **pick from the Mixed box**.
+
+Because:
+
+- The label is wrong, so it's not a mix.
+- You pick one fruit (say, an apple), and you can deduce the contents of all boxes.
+- This allows you to **determine the correct labels for all three boxes**.
+
+---
+
+### Summary:
+
+You **must pick from the Mixed box** because:
+
+- It is the only box whose label is "Mixed", and that label is **wrong**.
+- By picking a fruit from it, you can deduce the contents of all three boxes.
+- This is the only box that allows you to **identify

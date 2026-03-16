@@ -1,0 +1,5 @@
+: 
+
+</think>
+
+The CAP theorem says that in a distributed system, you can't fully have all three of consistency, availability, and partition tolerance at the same time—you have to choose which two to prioritize. Consistency means all users see the same data at the same time, availability means the system is always accessible, and partition tolerance means it keeps working even if parts of the network fail. Depending on your needs, you might focus more on being always available or ensuring data is always up to date, even if that means some trade-offs.

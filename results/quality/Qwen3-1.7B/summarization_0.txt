@@ -1,0 +1,7 @@
+<think>
+
+</think>
+
+- Docker containers are lightweight and share the host OS kernel, while virtual machines have their own OS and require more resources.  
+- Docker containers are isolated by default, but virtual machines require full virtualization and isolation through a hypervisor.  
+- Docker containers are faster and more efficient for deploying applications, while virtual machines offer more flexibility and isolation for development and testing.

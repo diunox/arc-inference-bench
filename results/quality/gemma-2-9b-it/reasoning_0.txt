@@ -1,0 +1,10 @@
+Here's how to solve this problem:
+
+* **Daily Progress:** The snail makes a net progress of 1 foot each day (3 feet up - 2 feet down).
+
+* **Reaching 27 Feet:** After 27 days, the snail will have climbed 27 feet.
+
+* **The Final Day:** On the 28th day, the snail climbs the remaining 3 feet and reaches the top.
+
+
+**Therefore, it takes the snail 28 days to reach the top of the wall.** 

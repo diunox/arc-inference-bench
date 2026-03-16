@@ -1,0 +1,68 @@
+<think>
+
+</think>
+
+Here's a simple implementation of an **LRU (Least Recently Used) Cache** in Python with `get()` and `put()` methods, along with **type hints** for better clarity and maintainability.
+
+```python
+from typing import Dict, Optional
+from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int) -> None:
+        if capacity <= 0:
+            raise ValueError("Capacity must be a positive integer.")
+        self.capacity: int = capacity
+        self.cache: OrderedDict[str, int] = OrderedDict()
+
+    def get(self, key: str) -> Optional[int]:
+        """
+        Retrieve the value of the key from the cache.
+        If the key is not present, return None.
+        If the key is present, move it to the end to mark it as recently used.
+        """
+        if key in self.cache:
+            self.cache.move_to_end(key)
+            return self.cache[key]
+        return None
+
+    def put(self, key: str, value: int) -> None:
+        """
+        Insert or update the value for the given key.
+        If the key is already present, update the value and move it to the end.
+        If the cache is full, remove the least recently used item (the first item).
+        """
+        if key in self.cache:
+            self.cache.move_to_end(key)
+            self.cache[key] = value
+        else:
+            if len(self.cache) >= self.capacity:
+                self.cache.popitem(last=False)  # Remove the least recently used item
+            self.cache[key] = value
+```
+
+### Example Usage:
+
+```python
+cache = LRUCache(3)
+
+cache.put("a", 1)
+cache.put("b", 2)
+cache.put("c", 3)
+
+print(cache.get("a"))  # Output: 1
+print(cache.get("b"))  # Output: 2
+print(cache.get("d"))  # Output: None
+
+cache.put("d", 4)  # "a" is the least recently used, will be evicted
+
+print(cache.get("a"))  # Output: None (evicted)
+print(cache.get("c"))  # Output: 3
+```
+
+### Notes:
+- `OrderedDict` is used to maintain the insertion order and efficiently move items to the end.
+- `move_to_end(key)` is used to mark an item as recently used.
+- `popitem(last=False)` removes the least recently used item (i.e., the first item in the OrderedDict).
+
+Let me know if you'd like to add support for more data types or additional features!

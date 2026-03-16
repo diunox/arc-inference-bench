@@ -1,0 +1,28 @@
+<think>
+
+</think>
+
+Here's a bash one-liner that does exactly what you asked:
+
+```bash
+du -hSk /var/log/* --max-depth=1 | sort -hrk 1 | head -n 10
+```
+
+### Explanation:
+
+- `du -hSk /var/log/* --max-depth=1`:  
+  - `du` (disk usage) lists file sizes.
+  - `-h` for human-readable sizes.
+  - `-S` shows only sizes (not total sizes of directories).
+  - `-k` sorts by size (this is the default, but specified for clarity).
+  - `--max-depth=1` limits the search to files directly in `/var/log`, not subdirectories.
+  - `/var/log/*` lists all files in `/var/log`.
+
+- `sort -hrk 1`:  
+  - `-h` for human-readable sorting (interprets sizes like 1K, 200M, etc.).
+  - `-r` reverses the sort (descending).
+  - `-k 1` sorts by the first field (file size).
+  
+- `head -n 10`: shows only the top 10 largest files.
+
+This will output the 10 largest files in `/var/log` by size, in human-readable format, sorted from largest to smallest.

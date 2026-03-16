@@ -1,0 +1,5 @@
+: 
+
+</think>
+
+HTTPS is important because it ensures secure communication between a user's browser and a website by encrypting data exchanged, protecting against eavesdropping, data tampering, and man-in-the-middle attacks. During a TLS handshake, the client and server first agree on a protocol version and cipher suite. The server then sends its digital certificate to the client, which verifies the certificate's authenticity using a trusted Certificate Authority. Once verified, both parties generate a shared secret key using asymmetric encryption, and then switch to symmetric encryption for efficient data transfer, ensuring all subsequent communications are encrypted and secure.

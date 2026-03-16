@@ -1,0 +1,76 @@
+<think>
+
+</think>
+
+Let's solve the problem step by step.
+
+---
+
+### Problem Summary:
+
+- The **snail climbs 3 feet during the day**.
+- It **slides back 2 feet at night**.
+- So, **net gain per day** = 3 feet (up) - 2 feet (down) = **1 foot per day**.
+- The wall is **30 feet high**.
+- The snail starts at the bottom of the wall.
+
+---
+
+### Step 1: How much does the snail climb in one full day (day + night)?
+
+- During the **day**, it climbs 3 feet.
+- During the **night**, it slides back 2 feet.
+- So, **net gain per full day** = 3 - 2 = **1 foot per day**.
+
+---
+
+### Step 2: How many days does it take to reach the top?
+
+But here's the catch: **if the snail reaches the top during the day, it doesn't slide back**.
+
+So we need to be careful with the last day.
+
+---
+
+### Step 3: Let's think about it.
+
+Let’s say the snail is on the 28th foot of the wall.
+
+- On the **28th foot**, it climbs 3 feet to reach the **31st foot**, which is **above the 30-foot wall**.
+- So, it **reaches the top during the day**, and **does not slide back**.
+
+So the **last day is a "day-only" day** — it doesn’t slide back.
+
+---
+
+### Step 4: Work backwards.
+
+Let’s say the snail is at the **28th foot** at the start of day 28.
+
+- It climbs 3 feet → reaches 31st foot → done.
+
+So, it only needs to get to the **28th foot** at the start of day 28.
+
+Now, how many days does it take to get to the 28th foot?
+
+- Since it gains 1 foot per day, it takes **28 days** to get to the 28th foot.
+
+- Then, on the **29th day**, it climbs 3 feet from 28 to 31 → done.
+
+---
+
+### ✅ Final Answer:
+
+**It takes 29 days** for the snail to reach the top.
+
+---
+
+### Why not 30 days?
+
+Because on the **30th day**, the snail would only need to climb 3 feet from the 27th foot, which is enough to get to the 30th foot (and above). So it would reach the top **during the 30th day**, and **not slide back**.
+
+So the **last day is the 30th day**, and that’s when it reaches the top.
+
+---
+
+### Final Answer: **29 days**.

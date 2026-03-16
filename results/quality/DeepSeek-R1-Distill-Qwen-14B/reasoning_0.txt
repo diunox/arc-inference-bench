@@ -1,0 +1,35 @@
+First, I'll calculate the snail's net progress each day. During the day, the snail climbs 3 feet, and at night, it slides back 2 feet. So, the net gain per day is 3 feet minus 2 feet, which equals 1 foot per day.
+
+Next, I'll determine how many days it takes for the snail to reach or exceed 30 feet. If the snail climbs 1 foot each day, it would seem to take 30 days. However, on the final day, when the snail climbs 3 feet, it would reach the top without sliding back that night. Therefore, the snail actually reaches the top in 27 days.
+</think>
+
+To determine how many days it takes for the snail to reach the top of a 30-foot wall, let's break down the problem step by step.
+
+**Given:**
+- **Climbing during the day:** 3 feet
+- **Sliding back at night:** 2 feet
+- **Total wall height:** 30 feet
+
+**Steps to Solve:**
+
+1. **Net Progress Per Day:**
+   - The snail climbs **3 feet** during the day.
+   - It slides back **2 feet** at night.
+   - **Net progress per day = Climbing during the day - Sliding back at night**
+   - **Net progress per day = 3 feet - 2 feet = 1 foot**
+
+2. **Calculating the Number of Days:**
+   - Since the snail makes a net progress of **1 foot** each day, it might seem like it would take **30 days** to cover the entire 30 feet.
+   - However, on the final day, when the snail climbs **3 feet**, it might reach or exceed the top without needing to slide back.
+
+3. **Detailed Calculation:**
+   - **Day 1:** Climbs to 3 feet, slides back to 1 foot.
+   - **Day 2:** Climbs to 4 feet, slides back to 2 feet.
+   - **...**
+   - **Day 27:** Climbs to 30 feet and stays there.
+
+   Therefore, the snail reaches the top of the wall on the **27th day** without sliding back.
+
+**Final Answer:**
+
+\boxed{27}

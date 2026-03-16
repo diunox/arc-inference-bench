@@ -1,0 +1,7 @@
+<think>
+
+</think>
+
+- **Docker containers share the host OS kernel**, while virtual machines run their own isolated operating system.  
+- **Docker containers are lighter and faster to start** than virtual machines, which require a full OS to boot.  
+- **Docker containers are used for application isolation**, while virtual machines provide full system isolation for multiple operating systems.

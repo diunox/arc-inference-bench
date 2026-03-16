@@ -1,0 +1,25 @@
+<think>
+
+</think>
+
+```json
+{
+  "ip_addresses": [
+    "192.168.1.10",
+    "10.0.0.5",
+    "172.16.0.1"
+  ],
+  "ports": [
+    "443",
+    "80",
+    "5432",
+    "9090"
+  ],
+  "protocols": [
+    "HTTPS",
+    "HTTP",
+    "PostgreSQL",
+    "Prometheus"
+  ]
+}
+```

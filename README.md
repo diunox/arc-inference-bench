@@ -181,3 +181,119 @@ docker compose --profile benchmark up -d openvino-llm
 ## License
 
 MIT
+
+## Extended Benchmarks (OpenVINO OVMS)
+
+The following benchmarks go beyond raw throughput to characterize the Arc A770's real-world inference behavior. All tests use OpenVINO OVMS with INT4 models.
+
+### Power Efficiency
+
+GPU power measured via sysfs `energy1_input` counter (cumulative microjoules). Idle power baseline: **39.8W**.
+
+| Model | Params | tok/s | Watts | J/token | tok/Watt |
+|-------|--------|:-----:|:-----:|:-------:|:--------:|
+| Qwen3-1.7B | 1.7B | 64.8 | 94.0 | 1.451 | 0.690 |
+| Qwen3-4B | 4B | 60.6 | 142.0 | 2.346 | 0.426 |
+| Mistral-7B-Instruct-v0.3 | 7B | 56.7 | 175.0 | 3.088 | 0.324 |
+| Qwen3-8B | 8B | 45.0 | 161.8 | 3.599 | 0.278 |
+| gemma-2-9b-it | 9B | 32.2 | 152.2 | 4.728 | 0.211 |
+| DeepSeek-R1-14B | 14B | 29.2 | 174.7 | 5.991 | 0.167 |
+| Phi-4-reasoning | 14B | 31.0 | 184.4 | 5.961 | 0.168 |
+| Qwen3-14B | 14B | 23.4 | 144.6 | 6.184 | 0.162 |
+
+**Key findings:**
+- Power scales roughly linearly with model size: 94W (1.7B) → 175W (14B)
+- Qwen3-1.7B is the efficiency champion at **0.69 tok/Watt** — 4.3x more efficient than Qwen3-14B
+- Phi-4-reasoning draws the most power (184W) despite being only marginally faster than DeepSeek-R1-14B
+- The Arc A770 TDP is 225W; even the heaviest model only reaches ~82% of that
+
+### Time to First Token (TTFT)
+
+Streaming latency measured from HTTP request to first `delta.content` SSE chunk. Median of 3 runs per prompt.
+
+| Model | Params | Median TTFT (ms) |
+|-------|--------|:----------------:|
+| Qwen3-4B | 4B | 71.0 |
+| Qwen3-1.7B | 1.7B | 72.5 |
+| Qwen3-8B | 8B | 79.6 |
+| Mistral-7B-Instruct-v0.3 | 7B | 83.7 |
+| Qwen3-14B | 14B | 118.8 |
+| DeepSeek-R1-14B | 14B | 124.0 |
+| gemma-2-9b-it | 9B | 125.6 |
+| Phi-4-reasoning | 14B | 149.4 |
+
+**Key findings:**
+- All models deliver sub-150ms TTFT — excellent for interactive use
+- Models ≤8B cluster in the 71-84ms range with negligible practical difference
+- 14B models add ~40-70ms overhead but still feel instant
+- TTFT is dominated by prompt processing, not model size per se (Qwen3-4B beats Qwen3-1.7B)
+
+### Context Length Scaling
+
+Generation speed (tok/s) at increasing context lengths. Fixed 128 output tokens to isolate the impact of context processing.
+
+| Model | Params | 1K | 2K | 4K | 8K | 16K |
+|-------|--------|:---:|:---:|:---:|:---:|:---:|
+| Qwen3-1.7B | 1.7B | 55.7 | 57.0 | 48.6 | 44.5 | 20.9 |
+| Qwen3-4B | 4B | 52.2 | 52.4 | 44.6 | 33.9 | 17.6 |
+| Mistral-7B-Instruct-v0.3 | 7B | 48.2 | 49.0 | 40.5 | 28.8 | 16.4 |
+| Qwen3-8B | 8B | 38.2 | 38.7 | 31.1 | 26.8 | 16.4 |
+| gemma-2-9b-it | 9B | 28.7 | 28.9 | 25.5 | 20.4 | OOM |
+| DeepSeek-R1-14B | 14B | 25.1 | 25.7 | 22.1 | 16.4 | 9.6 |
+| Phi-4-reasoning | 14B | 27.2 | 27.5 | 23.6 | 17.7 | 10.4 |
+| Qwen3-14B | 14B | 19.6 | 20.6 | 17.2 | 14.9 | 8.9 |
+
+**Key findings:**
+- All models handle 1K-2K context with no speed loss (KV cache fits comfortably in VRAM)
+- Speed drops ~15-20% at 4K, ~40% at 8K, ~60% at 16K
+- gemma-2-9b-it OOMs at 16K (9B model with less efficient KV cache compression)
+- 14B models still generate at 8.9-10.4 tok/s with 16K context — usable for long-document tasks
+- The 1K→2K *increase* in some models is within noise/warmup variance
+
+### Reasoning Accuracy
+
+20 math/logic problems with known numeric answers. Models instructed: "Think step by step. Put your final answer after ANSWER:". Auto-scored by extracting the answer and comparing to ground truth.
+
+| Model | Params | Correct | Accuracy |
+|-------|--------|:-------:|:--------:|
+| Phi-4-reasoning | 14B | 20/20 | **100.0%** |
+| Mistral-7B-Instruct-v0.3 | 7B | 13/20 | 65.0% |
+| DeepSeek-R1-14B | 14B | 6/20 | 30.0% |
+| Qwen3-8B | 8B | 3/20 | 15.0% |
+| Qwen3-14B | 14B | 2/20 | 10.0% |
+| Qwen3-4B | 4B | 2/20 | 10.0% |
+| Qwen3-1.7B | 1.7B | 2/20 | 10.0% |
+
+*Note: gemma-2-9b-it returned 400 errors (prompt format issue) and is excluded.*
+
+**Key findings:**
+- **Phi-4-reasoning is the standout** — perfect 20/20 score, purpose-built for mathematical reasoning
+- Mistral-7B surprises at 65% — strong reasoning for a 7B generalist model
+- **Qwen3 models used `/no_think` mode** (suppressed thinking tokens for fair output comparison). Their low scores likely reflect this constraint — Qwen3 relies heavily on its thinking chain for math. Full-think mode would score significantly higher
+- DeepSeek-R1-14B's 30% is also likely output-truncation limited (all responses hit the token ceiling at ~17.5s)
+- For math/reasoning workloads, Phi-4-reasoning is the clear choice on this hardware
+
+### Quality Shootout (Response Length)
+
+20 prompts across 5 categories (coding, summarization, reasoning, creative, extraction). Average completion tokens per category. Higher isn't always better — this measures verbosity and completeness.
+
+| Model | Params | Coding | Summary | Reasoning | Creative | Extraction |
+|-------|--------|:------:|:-------:|:---------:|:--------:|:----------:|
+| DeepSeek-R1-14B | 14B | 992 | 507 | 537 | 636 | 485 |
+| Phi-4-reasoning | 14B | 873 | 1023 | 893 | 957 | 886 |
+| Qwen3-1.7B | 1.7B | 573 | 106 | 372 | 65 | 129 |
+| gemma-2-9b-it | 9B | 550 | 114 | 126 | 86 | 172 |
+| Mistral-7B | 7B | 479 | 200 | 200 | 202 | 158 |
+| Qwen3-4B | 4B | 438 | 121 | 525 | 157 | 149 |
+| Qwen3-8B | 8B | 373 | 105 | 376 | 111 | 179 |
+| Qwen3-14B | 14B | 371 | 145 | 577 | 128 | 174 |
+
+*Raw outputs saved to `results/quality/` for manual inspection.*
+
+**Key findings:**
+- Phi-4-reasoning and DeepSeek-R1-14B are the most verbose across all categories (CoT reasoning tokens inflate output)
+- Qwen3 models with `/no_think` produce concise outputs — Qwen3-14B's 371 coding tokens vs DeepSeek's 992 represents a very different style
+- gemma-2-9b-it produces the shortest creative responses (86 tokens avg) — it's very terse
+- Response length alone doesn't indicate quality; the raw outputs need human evaluation
+
+*Tested 2026-03-16 on Intel Arc A770 16GB. All models via OpenVINO OVMS with INT4 quantization.*

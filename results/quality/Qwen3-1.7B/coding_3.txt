@@ -1,0 +1,49 @@
+<think>
+
+</think>
+
+Sure! Here's a Python function that takes a nested dictionary and returns a flattened dictionary with dot-separated keys:
+
+```python
+def flatten_dict(nested_dict, sep='.'):
+    def flatten(d, path=""):
+        if isinstance(d, dict):
+            for key, value in d.items():
+                new_path = f"{path}.{key}" if path else key
+                flatten(value, new_path)
+        elif isinstance(d, dict):
+            # If it's a dictionary, we'll process it recursively
+            for key, value in d.items():
+                new_path = f"{path}.{key}" if path else key
+                flatten(value, new_path)
+        else:
+            # If it's a value, add it to the result
+            if path:
+                result[path] = d
+            else:
+                result[key] = d
+
+    result = {}
+    flatten(nested_dict, "")
+    return result
+```
+
+### Example usage:
+
+```python
+nested_dict = {'a': {'b': 1, 'c': 2}}
+flattened = flatten_dict(nested_dict)
+print(flattened)
+```
+
+### Output:
+```python
+{'a.b': 1, 'a.c': 2}
+```
+
+### Notes:
+- The function uses a recursive approach to flatten nested dictionaries.
+- The `sep` parameter (default is `.`) is used to separate keys in the resulting dictionary.
+- The function assumes that the input is a dictionary, and the values are either dictionaries or other values.
+
+Let me know if you want to handle lists or other data types!

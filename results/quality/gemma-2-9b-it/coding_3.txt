@@ -1,0 +1,43 @@
+```python
+def flatten_dict(nested_dict, parent_key="", sep="."):
+    items = []
+    for k, v in nested_dict.items():
+        new_key = parent_key + sep + k if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dict(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
+```
+
+**Explanation:**
+
+1. **Function Definition:**
+   - `flatten_dict(nested_dict, parent_key="", sep=".")`:
+     - Takes the nested dictionary (`nested_dict`) as input.
+     - `parent_key`:  Starts as an empty string for the root level.
+     - `sep`:  Uses "." as the separator for dot-separated keys.
+
+2. **Iteration and Key Construction:**
+   - `for k, v in nested_dict.items()`: Iterates through key-value pairs in the dictionary.
+   - `new_key = parent_key + sep + k if parent_key else k`:
+     - Creates the new dot-separated key by adding the `parent_key` (if it exists) and the current key `k`, separated by `sep`.
+     - If `parent_key` is empty (root level), it just uses the current key `k`.
+
+3. **Recursive Handling of Nested Dictionaries:**
+   - `if isinstance(v, dict):`: Checks if the value `v` is another dictionary.
+     - `items.extend(flatten_dict(v, new_key, sep=sep).items())`:
+       - Recursively calls `flatten_dict` on the nested dictionary `v`.
+       - Passes the `new_key` as the `parent_key` for the nested level.
+       - Extends the `items` list with the key-value pairs from the flattened nested dictionary.
+
+4. **Handling Non-Dictionary Values:**
+   - `else: items.append((new_key, v))`: If the value `v` is not a dictionary, it's a simple value, so append it to the `items` list as a tuple (new_key, v).
+
+5. **Return Flattened Dictionary:**
+   - `return dict(items)`: Creates a new dictionary from the flattened `items` list.
+
+
+
+Let me know if you'd like to see this function used with an example!

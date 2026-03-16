@@ -1,0 +1,34 @@
+Okay, so the user has given me a text about a quick pasta recipe and wants me to extract it into a JSON format with specific fields: name, prep_time, ingredients, and steps. Let me first read through the text carefully.
+
+The recipe starts with "Quick Pasta: Takes 20 min." So the name should be "Quick Pasta" and prep_time is 20 minutes. Next, the ingredients listed are 200g spaghetti, 2 cloves garlic, olive oil, salt, and red pepper flakes. I'll make sure to list them as an array in the JSON.
+
+Now, for the steps: Boil pasta until al dente, sauté garlic in oil for 2 minutes, toss pasta with garlic oil, season, and serve. I'll break these down into a list of strings in the JSON.
+
+I need to structure the JSON correctly, making sure each field is properly formatted. The name is a string, prep_time is a number, ingredients is an array of strings, and steps is also an array of strings.
+
+Wait, I should double-check if the prep_time is in minutes. The text says "Takes 20 min," so yes, it's 20 minutes. Also, are all the ingredients correctly listed? The text mentions 200g spaghetti, 2 cloves garlic, olive oil, salt, red pepper flakes. That's five items, so the ingredients array should have five elements.
+
+For the steps, the first step is boiling the pasta, then sautéing garlic, tossing the pasta with the garlic oil, seasoning, and serving. Each of these should be a separate string in the steps array.
+
+I think that's all. Let me put it together in JSON format, ensuring proper syntax with commas and quotes.
+</think>
+
+```json
+{
+  "name": "Quick Pasta",
+  "prep_time": 20,
+  "ingredients": [
+    "200g spaghetti",
+    "2 cloves garlic",
+    "olive oil",
+    "salt",
+    "red pepper flakes"
+  ],
+  "steps": [
+    "Boil pasta until al dente.",
+    "Sauté garlic in oil for 2 minutes.",
+    "Toss pasta with garlic oil.",
+    "Season and serve."
+  ]
+}
+```

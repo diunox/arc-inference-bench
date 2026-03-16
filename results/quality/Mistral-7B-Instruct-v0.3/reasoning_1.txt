@@ -1,0 +1,7 @@
+The number of machines and widgets are directly proportional, and the time taken is inversely proportional. This means that if 5 machines take 5 minutes to make 5 widgets, then if we have more machines, we can make more widgets in the same amount of time.
+
+If 100 machines are used to make 100 widgets, since the number of widgets and machines are equal, we would expect it to take the same amount of time, 5 minutes, to make all 100 widgets. This is because each machine is making one widget at the same time.
+
+In other words, if one machine takes 5 minutes to make one widget, then 100 machines, each making one widget, will also take 5 minutes to make 100 widgets. This is because the work is being done concurrently, not sequentially.
+
+However, it's important to note that in real-world scenarios, other factors such as resource constraints, machine maintenance, or potential delays might influence the actual time taken. But in this simplified scenario, assuming all machines work simultaneously without any hindrances, it would indeed take 5 minutes to make 100 widgets.

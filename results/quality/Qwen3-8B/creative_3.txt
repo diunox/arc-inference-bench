@@ -1,0 +1,9 @@
+<think>
+
+</think>
+
+There once was a coder named Sue,  
+Who debugged through a production outage too.  
+With logs and with tools,  
+She found the root clues—  
+Now the system's back, and the team's all anew!

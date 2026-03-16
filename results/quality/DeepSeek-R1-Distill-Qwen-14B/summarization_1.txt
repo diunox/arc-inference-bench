@@ -1,0 +1,14 @@
+Okay, so I need to explain the CAP theorem in distributed systems to a non-technical manager in 2-3 sentences. Hmm, let's break this down. 
+
+First, I remember that CAP theorem has something to do with trade-offs in distributed systems. I think it stands for Consistency, Availability, and Partition Tolerance. So, in simple terms, when building a system that can handle data across multiple nodes, you can't have all three at the same time. 
+
+Consistency means that all nodes see the same data at the same time. Availability means the system is always up and running. Partition Tolerance is about being able to function even if some nodes are disconnected. 
+
+So, for a manager, I should probably avoid technical jargon. Maybe say something like, "In distributed systems, there's a fundamental trade-off between ensuring data is up-to-date everywhere, the system always being available, and handling network issues. You can't have all three, so you have to choose which two are more important for your needs."
+
+Wait, that sounds a bit too technical. Maybe simplify it more. How about, "Distributed systems face a choice: ensuring all data is consistent across all nodes, the system always being available to users, or handling situations where nodes can't communicate. It's impossible to have all three, so you must prioritize which two are most important for your business."
+
+That's better. It's clear and avoids too much jargon. I think that's a good explanation for someone without a technical background.
+</think>
+
+In distributed systems, there's a key trade-off between ensuring data consistency across all nodes, maintaining system availability for users, and handling network disruptions. You can't achieve all three simultaneously, so you must choose which two are most important for your business needs.

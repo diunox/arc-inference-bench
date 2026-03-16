@@ -1,0 +1,13 @@
+Here's the explanation:
+
+* **Step 1: Find the individual machine's rate.** 
+   If 5 machines make 5 widgets in 5 minutes, that means one machine makes one widget in 5 minutes.
+
+* **Step 2: Apply the individual rate to 100 machines.**
+   Since each machine can make one widget in 5 minutes, 100 machines can each make one widget in 5 minutes.
+
+* **Step 3:  The result.**
+   Because they all work simultaneously, 100 machines would make 100 widgets in **5 minutes**. 
+
+
+Let me know if you'd like to try another problem! 

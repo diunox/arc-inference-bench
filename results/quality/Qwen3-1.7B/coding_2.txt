@@ -1,0 +1,22 @@
+<think>
+
+</think>
+
+You can use the following bash one-liner to find all files larger than 100MB in `/var/log`, sort them by size in descending order, and display the top 10 with human-readable sizes:
+
+```bash
+find /var/log -type f -size +100M | sort -rh | head -n10
+```
+
+### Explanation:
+- `find /var/log -type f -size +100M`: Finds all files in `/var/log` larger than 100MB.
+- `sort -rh`: Sorts the results by size in descending order, using human-readable units (e.g., GB, MB, KB).
+- `head -n10`: Displays the top 10 entries.
+
+You can also use `ls -l` with `awk` for a more concise version if you're okay with the output format:
+
+```bash
+find /var/log -type f -size +100M -ls | awk '{print $6, $5, $11}'
+```
+
+Let me know if you want to format the output differently!

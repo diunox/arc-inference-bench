@@ -1,0 +1,5 @@
+<think>
+
+</think>
+
+HTTPS is important because it ensures secure communication between a user's browser and a website by encrypting data transmitted over the internet, protecting sensitive information such as login credentials, personal data, and payment details from interception by malicious actors. During a TLS handshake, the client and server establish a secure connection by exchanging cryptographic parameters, negotiating encryption algorithms, and verifying each other's identities through digital certificates. This process results in the creation of a shared secret key used to encrypt subsequent communications, ensuring confidentiality, integrity, and authenticity of the data exchanged.

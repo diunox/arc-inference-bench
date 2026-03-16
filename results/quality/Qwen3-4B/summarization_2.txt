@@ -1,0 +1,10 @@
+<think>
+
+</think>
+
+| **Aspect**              | **Microservices**                                                                 | **Monolithic Architecture**                                                       |
+|-------------------------|------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| **Scalability**         | Easily scalable per service; independent scaling of components.                  | Difficult to scale individual parts; entire application scales together.      |
+| **Development**        | Allows team autonomy; can use different tech stacks for different services.     | Requires shared tech stacks and dependencies; harder to manage.               |
+| **Deployment**         | Deployable as independent services; faster release cycles.                       | Complex deployment; requires careful coordination of all parts.              |
+| **Maintenance**        | Can become complex with many services; harder to manage inter-service communication. | Easier to maintain as a single codebase; fewer interactions between components. |

@@ -1,0 +1,8 @@
+## Microservices vs. Monolithic Architecture:
+
+| Feature | Microservices | Monolithic Architecture |
+|---|---|---|
+| **Scalability** | Highly scalable, individual services can be scaled independently | Limited scalability, entire application needs to be scaled |
+| **Development** | Faster development cycles, teams can work on independent services | Slower development, changes require deploying the whole application |
+| **Maintainability** | Easier to maintain and debug, isolated failures don't affect the whole system | Harder to maintain, changes can have unintended consequences across the entire application |
+| **Complexity** | Higher complexity due to distributed systems and communication | Simpler architecture, easier to understand and manage initially | 

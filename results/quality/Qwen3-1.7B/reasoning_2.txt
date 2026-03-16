@@ -1,0 +1,98 @@
+<think>
+
+</think>
+
+This is a classic logic puzzle. Let's break it down step by step.
+
+We have three boxes, each labeled **Apples**, **Oranges**, and **Mixed**, and **all the labels are wrong**. That means:
+
+- The **Apples** box is not actually apples.
+- The **Oranges** box is not actually oranges.
+- The **Mixed** box is not actually mixed.
+
+We are allowed to pick **one fruit from one box** to determine which box contains what. The goal is to figure out which box to pick from to determine the correct content.
+
+---
+
+### Step 1: Understand the labels
+- **Apples** is not apples.
+- **Oranges** is not oranges.
+- **Mixed** is not mixed.
+
+So, each box contains a different fruit, but the labels are all wrong.
+
+---
+
+### Step 2: Think about what you can pick
+If you pick one fruit from one box, you can determine the content of that box. But since the labels are all wrong, the box you pick must be the one that has a fruit **not** labeled as that fruit.
+
+Let's try this:
+
+---
+
+### Step 3: Try picking from the **Mixed** box
+
+- **Mixed** is not mixed.
+- So, the **Mixed** box must contain **either apples or oranges**.
+
+Now, let's think:
+
+- If you pick from the **Mixed** box, you could get:
+  - **Apples** (if it's actually apples)
+  - **Oranges** (if it's actually oranges)
+
+But the labels are all wrong. So, if you pick from the **Mixed** box, you can be sure it's **not mixed**, and you can figure out what it is.
+
+But let's think more carefully.
+
+---
+
+### Step 4: Use logic to figure out which box to pick
+
+Let’s try this:
+
+- **Apples** is not apples.
+- **Oranges** is not oranges.
+- **Mixed** is not mixed.
+
+So, the only way to figure out the content of the boxes is to pick from the one that has a label that is not the actual content.
+
+Let’s try this:
+
+---
+
+### Step 5: Try picking from the **Mixed** box
+
+- The **Mixed** box is not mixed, so it must be **either apples or oranges**.
+- So, if you pick from the **Mixed** box, you can be sure it's not mixed, and you can determine it's either apples or oranges.
+- Then, you can use that to figure out the other boxes.
+
+But here’s the key:
+
+If you pick from the **Mixed** box, and you get **apples**, then:
+- The **Mixed** box is actually **apples** (but it's labeled as Mixed).
+- Then, the **Apples** box must be **oranges** (since it's not apples).
+- Then, the **Oranges** box must be **mixed**.
+
+That works.
+
+Or if you pick from the **Mixed** box and get **oranges**, then:
+- The **Mixed** box is actually **oranges**.
+- Then the **Oranges** box is **apples**.
+- Then the **Apples** box is **mixed**.
+
+So, in either case, the **Mixed** box is the one that can be used to determine the contents of the other boxes.
+
+---
+
+### ✅ Final Answer:
+
+**Pick from the Mixed box.**
+
+**Why?**
+
+Because the label on the Mixed box is wrong, so it cannot be mixed. So, the fruit you pick from the Mixed box is either apples or oranges, and that allows you to determine the correct content of the other boxes.
+
+---
+
+### ✅ Final Answer: Pick from the **Mixed** box.

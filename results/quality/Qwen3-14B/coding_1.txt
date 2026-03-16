@@ -1,0 +1,62 @@
+: 
+
+</think>
+
+Here's a simple implementation of an **LRU (Least Recently Used) Cache** in Python with `get()` and `put()` methods, including **type hints** using Python's `typing` module:
+
+```python
+from typing import Optional, Dict
+from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int) -> None:
+        self.capacity: int = capacity
+        self.cache: OrderedDict[str, int] = OrderedDict()
+
+    def get(self, key: str) -> Optional[int]:
+        """
+        Get the value of the key if it exists in the cache, otherwise return None.
+        Also moves the accessed key to the end (most recently used).
+        """
+        if key not in self.cache:
+            return None
+        # Move the accessed key to the end (most recently used)
+        value = self.cache.pop(key)
+        self.cache[key] = value
+        return value
+
+    def put(self, key: str, value: int) -> None:
+        """
+        Add or update the value of the key in the cache.
+        If the key already exists, update the value and move it to the end.
+        If the cache is full, remove the least recently used item (first item).
+        """
+        if key in self.cache:
+            # Update the value and move to end
+            self.cache.pop(key)
+        elif len(self.cache) >= self.capacity:
+            # Remove the least recently used item (first item)
+            self.cache.popitem(last=False)
+        # Add the new key to the end (most recently used)
+        self.cache[key] = value
+```
+
+### Example Usage:
+
+```python
+cache = LRUCache(2)
+
+cache.put("a", 1)
+cache.put("b", 2)
+print(cache.get("a"))  # Output: 1
+cache.put("c", 3)      # Evicts key "b"
+print(cache.get("b"))  # Output: None
+print(cache.get("c"))  # Output: 3
+```
+
+### Notes:
+- This implementation uses `OrderedDict` from the standard library to maintain the order of insertion and access.
+- The `get()` method updates the access time by moving the key to the end of the cache.
+- The `put()` method ensures the cache does not exceed its capacity by evicting the least recently used item (LRU) when needed.
+
+Let me know if you'd like a version that doesn't use `OrderedDict` (e.g., using a `dict` and a `deque` manually).

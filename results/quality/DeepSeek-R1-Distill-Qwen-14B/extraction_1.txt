@@ -1,0 +1,25 @@
+Okay, so I need to parse this server log entry into structured JSON with specific fields: timestamp, level, service, and message. Let's break this down step by step.
+
+First, I'll look at the log entry: "2024-03-15T14:32:01.445Z ERROR [auth-service] Failed login attempt for user admin@example.com from IP 203.0.113.42 - account locked after 5 attempts"
+
+I need to extract each part into the correct JSON fields.
+
+1. **Timestamp**: It looks like the log has the date and time in the format "YYYY-MM-DDTHH:MM:SS.SSSZ". So I'll take "2024-03-15T14:32:01.445Z" as the timestamp.
+
+2. **Level**: The level is indicated by the word "ERROR", so that goes into the level field.
+
+3. **Service**: The service is enclosed in brackets, so it's "auth-service". I'll make sure to include the brackets as they are part of the string.
+
+4. **Message**: The rest of the log entry after the service level is the message. So that would be "Failed login attempt for user admin@example.com from IP 203.0.113.42 - account locked after 5 attempts".
+
+Putting it all together, the JSON structure should have these four fields with the respective values extracted from the log entry. I'll make sure to format it correctly with proper commas and brackets.
+</think>
+
+```json
+{
+  "timestamp": "2024-03-15T14:32:01.445Z",
+  "level": "ERROR",
+  "service": "[auth-service]",
+  "message": "Failed login attempt for user admin@example.com from IP 203.0.113.42 - account locked after 5 attempts"
+}
+```

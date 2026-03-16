@@ -1,0 +1,35 @@
+```yaml
+version: "3.9"
+
+services:
+  mydb:
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    volumes:
+      - mydb_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret123
+    memory_limit: "512M"
+
+volumes:
+  mydb_data: 
+``` 
+
+
+**Explanation:**
+
+* **version:** Specifies the Docker Compose file version.
+* **services:** Defines the services to be run.
+* **mydb:**
+    * **image:** Uses the official PostgreSQL 16 image.
+    * **ports:** Maps port 5433 on the host to port 5432 inside the container.
+    * **volumes:** Creates a named volume `mydb_data` and mounts it to the PostgreSQL data directory, ensuring persistent storage.
+    * **environment:** Sets the `POSTGRES_USER` and `POSTGRES_PASSWORD` environment variables.
+    * **memory_limit:** Limits the memory usage of the container to 512 MB.
+* **volumes:** Defines the named volume used for persistent storage. 
+
+
+
+Let me know if you have any other Docker Compose requirements!

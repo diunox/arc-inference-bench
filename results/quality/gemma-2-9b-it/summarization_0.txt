@@ -1,0 +1,7 @@
+Here's a 3-bullet summary of Docker containers vs. virtual machines, aimed at junior devs:
+
+* **Lightweight:** Containers are like tiny, portable packages containing just your code and its dependencies, making them super fast to start and use. VMs, on the other hand, are full-blown operating systems, taking much longer to boot up.
+
+* **Shared Kernel:** Containers share the host operating system's kernel, meaning they use fewer resources and can run more efficiently than VMs, which each have their own kernel.
+
+* **Portability:** Containers are designed to be highly portable, running the same way on any machine with Docker installed. VMs, while portable, can sometimes face compatibility issues depending on the underlying hardware and software.

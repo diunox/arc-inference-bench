@@ -1,0 +1,22 @@
+Here's how to solve this classic riddle:
+
+**Let:**
+
+*  x = the cost of the ball
+
+**Since the bat costs $1.00 more than the ball, we know:**
+
+* The bat costs x + $1.00
+
+**Together, their cost is $1.10, so:**
+
+* x + (x + $1.00) = $1.10
+
+**Now we can solve for x:**
+
+* 2x + $1.00 = $1.10
+* 2x = $0.10
+* x = $0.05
+
+
+**Therefore, the ball costs $0.05 (or 5 cents).** 

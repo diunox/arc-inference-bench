@@ -1,0 +1,2 @@
+In simple terms, the CAP theorem states that in any distributed system, you can only choose two out of the three following guarantees: consistency (all data is the same everywhere), availability (every request gets a response), or partition tolerance (the system keeps working even if parts of it are down).  
+

@@ -1,0 +1,52 @@
+<think>
+
+</think>
+
+You are told that there are three boxes labeled:
+
+- Apples  
+- Oranges  
+- Mixed  
+
+But **all the labels are wrong**. You can pick **one fruit from one box** to determine the correct contents of all boxes.
+
+---
+
+### Step-by-step reasoning:
+
+Since **all labels are wrong**, the **Mixed** box cannot contain a mix of apples and oranges — it must contain only one type of fruit (either all apples or all oranges). Similarly, the **Apples** box cannot contain only apples, and the **Oranges** box cannot contain only oranges.
+
+Let’s think about the implications:
+
+1. **If you pick a fruit from the "Mixed" box**, you will know for sure what it is. But since the label is wrong, it cannot be mixed — so it must be **all apples or all oranges**.  
+   - If you pick an **apple**, then the "Mixed" box contains only apples.  
+   - If you pick an **orange**, then the "Mixed" box contains only oranges.
+
+2. Let's say you pick from the **Mixed** box and find an **apple**.  
+   - Then the "Mixed" box is actually **Apples**.  
+   - But the label "Apples" is also wrong, so the **Apples** box must be something else — it can't be apples, and it can't be mixed (because that's already used), so it must be **Oranges**.  
+   - That leaves the **Oranges** box (which is also mislabeled) — it must be the **Mixed** box.
+
+3. If you picked an **orange** from the "Mixed" box, then:  
+   - The "Mixed" box is actually **Oranges**.  
+   - The "Oranges" box is mislabeled, so it can't be oranges — it must be **Apples**.  
+   - That leaves the **Apples** box to be the **Mixed** box.
+
+---
+
+### So the best strategy is:
+
+**Pick one fruit from the "Mixed" box**.
+
+Because:
+
+- The label is wrong, so it's not mixed.
+- Whatever fruit you pick will tell you the actual contents of that box.
+- From there, you can logically deduce the contents of the other two boxes.
+
+---
+
+### Final Answer:
+
+**Pick a fruit from the "Mixed" box**.  
+Because all the labels are wrong, the "Mixed" box must contain only one type of fruit (either all apples or all oranges), and this single pick will allow you to determine the correct contents of all three boxes.

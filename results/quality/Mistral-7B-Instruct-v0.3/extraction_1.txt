@@ -1,0 +1,6 @@
+{
+  "timestamp": "2024-03-15T14:32:01.445Z",
+  "level": "ERROR",
+  "service": "auth-service",
+  "message": "Failed login attempt for user admin@example.com from IP 203.0.113.42 - account locked after 5 attempts"
+}

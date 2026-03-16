@@ -1,0 +1,69 @@
+<think>
+
+</think>
+
+Here's a Python function that validates an email address using regular expressions (regex). It includes:
+
+- A detailed docstring with edge cases.
+- Handling of `None` input.
+- A regex pattern that matches most standard email formats.
+
+```python
+import re
+
+def is_valid_email(email: str) -> bool:
+    """
+    Validate an email address using regular expressions.
+
+    Args:
+        email (str, optional): The email address to validate. If None, returns False.
+
+    Returns:
+        bool: True if the email is valid, False otherwise.
+
+    Edge cases included in the regex pattern:
+        - The email must contain exactly one '@' symbol.
+        - The local part (before '@') must not be empty and can contain letters, digits, periods, underscores, and hyphens.
+        - The domain part (after '@') must contain at least one dot and must have at least two parts (e.g., example.com).
+        - The domain part must not contain spaces or special characters.
+        - The local part cannot start or end with a hyphen.
+        - The domain part must not start or end with a hyphen.
+        - The local part cannot contain two consecutive periods.
+        - The domain part must not have consecutive dots.
+
+    Examples:
+        >>> is_valid_email("test@example.com")
+        True
+        >>> is_valid_email("test@.com")
+        False
+        >>> is_valid_email("test@.com")
+        False
+        >>> is_valid_email("test..@example.com")
+        False
+        >>> is_valid_email("test@exa-mple.com")
+        True
+        >>> is_valid_email("test@exa mple.com")
+        False
+        >>> is_valid_email(None)
+        False
+    """
+    if email is None:
+        return False
+
+    # Regular expression pattern for email validation
+    email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+
+    return re.match(email_regex, email) is not None
+```
+
+### Explanation of the Regex:
+- `^` and `$`: Anchors to match the entire string.
+- `[a-zA-Z0-9._%+-]+`: Matches the local part (before the '@').
+  - `a-zA-Z0-9`: letters (both cases), digits.
+  - `._%+-`: allows `.`, `_`, `%`, `+`, `-`.
+- `@`: The literal '@' symbol.
+- `[a-zA-Z0-9.-]+`: Matches the domain name part (before the final dot).
+- `\.`: The literal '.' character.
+- `[a-zA-Z]{2,}`: The top-level domain (TLD), at least 2 letters.
+
+This regex is not 100% comprehensive (e.g., it does not handle all valid email formats), but it covers most common cases and is widely used as a standard for email validation.

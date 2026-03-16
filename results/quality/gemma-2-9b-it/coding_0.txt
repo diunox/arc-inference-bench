@@ -1,0 +1,57 @@
+```python
+import re
+
+def validate_email(email):
+  """Validates an email address using a regular expression.
+
+  Args:
+    email: The email address to validate. Can be None.
+
+  Returns:
+    True if the email address is valid, False otherwise.
+
+  Edge Cases:
+    - Empty string: ""
+    - Email with no domain: "user@example"
+    - Email with invalid characters in the domain: "user@example..com"
+    - Email with multiple dots in the local part: "user..name@example.com"
+    - Special characters in the local part: "user_with_special!chars@example.com"
+
+  """
+  if email is None:
+    return False
+  regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+  match = re.match(regex, email)
+  return bool(match)
+
+# Example usage
+print(validate_email("user@example.com"))  # True
+print(validate_email("user.name@example.com"))  # True
+print(validate_email("user@example"))  # False
+print(validate_email("user_with_special!chars@example.com"))  # True
+print(validate_email(""))  # False
+print(validate_email(None))  # False
+```
+
+**Explanation:**
+
+1. **Import `re`:** Imports the regular expression library.
+2. **Define `validate_email(email)`:**
+   - Takes an `email` string as input.
+   - Handles `None` input by returning `False`.
+3. **Regular Expression:** 
+   - `r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"`
+     - `^`: Matches the beginning of the string.
+     - `[a-zA-Z0-9._%+-]+`: Matches one or more alphanumeric characters, periods, underscores, percentage signs, plus or minus signs (allowed in the local part before the "@" symbol).
+     - `@`: Matches the "@" symbol.
+     - `[a-zA-Z0-9.-]+`: Matches one or more alphanumeric characters, periods, or hyphens (allowed in the domain name).
+     - `\.`: Matches a literal period.
+     - `[a-zA-Z]{2,}$`: Matches two or more alphabetic characters (for the top-level domain, e.g., "com", "net", "org") at the end of the string.
+4. **`re.match(regex, email)`:** Attempts to match the regex pattern at the beginning of the `email` string.
+5. **`bool(match)`:** Converts the match object to a boolean:
+   - If there's a match, it returns `True`.
+   - If there's no match, it returns `False`.
+
+
+
+Let me know if you have any other questions.

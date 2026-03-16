@@ -1,0 +1,85 @@
+<think>
+
+</think>
+
+Here's a simple implementation of an **LRU (Least Recently Used)** cache class in Python, with `get()` and `put()` methods, along with type hints for clarity and type safety.
+
+```python
+from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int = 10):
+        self.capacity = capacity
+        self.cache = OrderedDict()
+
+    def put(self, key: str, value: str) -> None:
+        """
+        Add or update a key-value pair in the cache.
+        If the cache is full, the least recently used item is removed.
+        """
+        if key in self.cache:
+            self.cache[key].value = value  # Update the value
+            self.cache[key].last_used = datetime.now()  # Track last used time
+        else:
+            if len(self.cache) >= self.capacity:
+                # Remove the least recently used item
+                lru_key = self.cache.popitem(last=False)
+                print(f"Removed: {lru_key[0]} -> {lru_key[1]}")
+
+            self.cache[key] = KeyValueEntry(value=value, last_used=datetime.now())
+
+    def get(self, key: str) -> str:
+        """
+        Retrieve the value associated with a key.
+        If the key is not present, return None.
+        """
+        if key in self.cache:
+            # Mark the key as recently used
+            self.cache[key].last_used = datetime.now()
+            return self.cache[key].value
+        else:
+            return None
+
+class KeyValueEntry:
+    def __init__(self, value: str, last_used: datetime):
+        self.value = value
+        self.last_used = last_used
+
+    def __str__(self) -> str:
+        return f"Value: {self.value}, Last Used: {self.last_used}"
+
+# Example usage
+from datetime import datetime
+
+# Create an LRU cache with capacity 5
+cache = LRUCache(capacity=5)
+
+# Add some items
+cache.put("a", "value_a")
+cache.put("b", "value_b")
+cache.put("c", "value_c")
+cache.put("d", "value_d")
+cache.put("e", "value_e")
+
+# Access items
+print(cache.get("a"))  # Output: value_a
+print(cache.get("b"))  # Output: value_b
+print(cache.get("c"))  # Output: value_c
+print(cache.get("d"))  # Output: value_d
+print(cache.get("e"))  # Output: value_e
+
+# Try to access an item not in the cache
+print(cache.get("f"))  # Output: None
+
+# Remove an item
+cache.put("a", "new_value_a")  # Overwrite the value
+print(cache.get("a"))  # Output: new_value_a
+```
+
+### Notes:
+- The `KeyValueEntry` class is used to store the value and the last used time.
+- The `OrderedDict` is used to maintain the order of insertion, with the least recently used item being popped from the end.
+- The `put` method updates the value and updates the last used time.
+- The `get` method returns the value if the key exists, otherwise returns `None`.
+
+Let me know if you'd like to extend this to include more features like `contains_key`, `size`, or `clear`.

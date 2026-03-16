@@ -1,0 +1,5 @@
+You should pick from the box labeled "Mixed". Here's why:
+
+* **Guaranteed Different Fruit:** Since all the labels are wrong, the "Mixed" box can't contain a mix of apples and oranges. It must contain a single type of fruit that's different from both apples and oranges. 
+
+Let me know if you want to try another logic puzzle! 

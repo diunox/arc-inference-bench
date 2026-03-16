@@ -1,0 +1,48 @@
+First, let's define the variables. Let \( b \) represent the cost of the ball in dollars, and \( t \) represent the cost of the bat.
+
+According to the problem, the bat costs $1.00 more than the ball. This gives us the equation:
+\[ t = b + 1.00 \]
+
+Additionally, the total cost of the bat and the ball together is $1.10:
+\[ t + b = 1.10 \]
+
+Substituting the expression for \( t \) from the first equation into the second equation:
+\[ (b + 1.00) + b = 1.10 \]
+\[ 2b + 1.00 = 1.10 \]
+
+Subtracting $1.00$ from both sides:
+\[ 2b = 0.10 \]
+
+Dividing both sides by 2:
+\[ b = 0.05 \]
+
+So, the ball costs $0.05.
+</think>
+
+Let's break down the problem step by step.
+
+**Given:**
+1. The total cost of a bat and a ball together is \$1.10.
+2. The bat costs \$1.00 more than the ball.
+
+**Let:**
+- \( b \) = cost of the ball (in dollars)
+- \( t \) = cost of the bat (in dollars)
+
+**Step 1:** Express the cost of the bat in terms of the ball's cost.
+\[ t = b + 1.00 \]
+
+**Step 2:** Use the total cost equation.
+\[ t + b = 1.10 \]
+
+**Step 3:** Substitute the expression for \( t \) from Step 1 into the equation from Step 2.
+\[ (b + 1.00) + b = 1.10 \]
+\[ 2b + 1.00 = 1.10 \]
+
+**Step 4:** Subtract \$1.00 from both sides to solve for \( b \).
+\[ 2b = 0.10 \]
+\[ b = \frac{0.10}{2} \]
+\[ b = 0.05 \]
+
+**Final Answer:**
+The ball costs \(\boxed{\$0.05}\).

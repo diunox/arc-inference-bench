@@ -1,0 +1,40 @@
+<think>
+
+</think>
+
+Here's a Python function that takes a nested dictionary and flattens it into a single-level dictionary with dot-separated keys:
+
+```python
+def flatten_dict(d, parent_key='', sep='.'):
+    items = []
+    for k, v in d.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dict(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+```
+
+### Example Usage:
+
+```python
+nested_dict = {'a': {'b': 1, 'c': {'d': 2}}, 'e': 3}
+flattened = flatten_dict(nested_dict)
+print(flattened)
+```
+
+### Output:
+
+```
+{'a.b': 1, 'a.c.d': 2, 'e': 3}
+```
+
+### Explanation:
+
+- The function recursively traverses the dictionary.
+- For each key-value pair, it constructs a new key using dot notation.
+- If a value is a dictionary, it continues the recursion.
+- Otherwise, it adds the key-value pair to the result.
+
+Let me know if you want to handle lists or other data types as well!

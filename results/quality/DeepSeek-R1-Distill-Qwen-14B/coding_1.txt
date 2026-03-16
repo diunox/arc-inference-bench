@@ -1,0 +1,61 @@
+Okay, I need to implement an LRU (Least Recently Used) cache in Python with get() and put() methods, including type hints. Let's think about how to approach this.
+
+First, I should recall what an LRU cache does. It's a cache that evicts the least recently used item when the cache is full. So, when putting a new item and the cache is at capacity, the item that's been used least recently gets removed.
+
+I know that in Python, I can use a dictionary to store the key-value pairs. But to track the order of usage, I'll need a way to keep track of which items have been accessed more recently. One common approach is to use an OrderedDict from the collections module because it maintains the insertion order. However, when an item is accessed (either via get or put), it should be moved to the end to indicate it's the most recently used.
+
+Wait, but in Python 3.7+, regular dictionaries maintain insertion order, so maybe I can use a regular dict. But for the purpose of this implementation, perhaps using OrderedDict is more straightforward for managing the order.
+
+Alternatively, another approach is to have a separate data structure to track the order of usage. Maybe a doubly linked list could help, where each node represents a key, and the least recently used is at the front. But that might complicate things.
+
+Let me think: perhaps using an OrderedDict where each access moves the key to the end. That way, the first key in the order is the least recently used.
+
+So, the plan is:
+
+1. Use an OrderedDict to keep track of the cache items, ordered by their usage.
+2. The get() method will check if the key exists in the dict. If it does, move it to the end (making it the most recently used). If not, return None.
+3. The put() method will add a new key-value pair. If the key already exists, it's moved to the end as it's now recently used. If the key doesn't exist and the cache is at capacity, remove the first item (least recently used) and add the new item to the end.
+
+Wait, but in the OrderedDict, when you access a key, you can move it to the end using move_to_end(). So for get(), when the key is found, we move it to the end. For put(), if the key is already present, we move it to the end as well. If not, we add it, and if the size exceeds the capacity, we pop the first item.
+
+Also, I need to include type hints, so I'll specify the types for the methods' parameters and return values.
+
+So, the class will have:
+
+- __init__(self, capacity: int): initializes the cache with a given capacity.
+- get(self, key: Any) -> Any: retrieves the value for the key if present, else returns None.
+- put(self, key: Any, value: Any) -> None: adds or updates the key with the value.
+
+Let me outline the steps for get():
+
+- Check if the key is in the cache.
+- If it is, get the value, move the key to the end (so it's marked as recently used), return the value.
+- If not, return None.
+
+For put():
+
+- If the key is already in the cache, update its value and move it to the end.
+- If not, check if the cache has space. If yes, add the key-value pair and move it to the end.
+- If no space, remove the first item (which is the least recently used), then add the new key-value pair and move it to the end.
+
+Wait, but in OrderedDict, when you add a new key, it's placed at the end by default. So when adding a new key, after inserting, we don't need to move it again. But when updating an existing key, we need to move it to the end to mark it as recently used.
+
+So, in code:
+
+In the put method:
+
+if key is in self.cache:
+    self.cache[key] = value  # This doesn't change the order in OrderedDict
+    # So we need to move it to the end
+    self.cache.move_to_end(key)
+else:
+    if len(self.cache) >= self.capacity:
+        # Remove the first key (least recently used)
+        removed_key = next(iter(self.cache.keys()))
+        del self.cache[removed_key]
+    # Add the new key to the end
+    self.cache[key] = value
+
+Wait, but in the OrderedDict, when you assign to an existing key, it doesn't change the order. So, to mark it as recently used, you have to move it to the end. So in both cases (existing or new), after adding or updating, you need to move it to the end.
+
+Wait no: when you add a new key, it's already at the end. So for existing keys, after updating, you need to move to end. For
