@@ -9,10 +9,10 @@ There's very little practical benchmark data for running LLMs on Intel Arc GPUs.
 | Component | Spec |
 |-----------|------|
 | GPU | Intel Arc A770 16GB |
-| CPU | Intel Core i5-13400 |
-| RAM | 64GB DDR5 |
-| OS | Ubuntu 24.04 |
-| Driver | i915 (Linux 6.8+) |
+| CPU | Intel Core i5-13600K |
+| RAM | 64GB DDR4 |
+| OS | Ubuntu 25.04 |
+| Driver | i915 (Linux 6.14) |
 
 ## Results
 
