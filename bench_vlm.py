@@ -13,6 +13,7 @@ Suites:
   chart    : bar chart comprehension (3 charts)
   layout   : multi-line text + numeric extraction (3 documents)
   diff     : multi-image difference detection (3 paired scenes) [v1.1]
+  frames   : temporal reasoning across a frame sequence (5 scenarios) [v1.3]
 
 v1.1 (2026-06-14):
   - Grader now extracts the final answer from CoT-prefixed responses
@@ -33,6 +34,15 @@ v1.2 (2026-06-14):
     the length limit. Was 80/120 — way too tight for <think> models.
   - Stored response snippet in details bumped from 50/80 to 500 chars
     so post-mortem debugging actually shows the model's output.
+
+v1.3 (2026-06-14):
+  - New `frames` suite: temporal/sequence reasoning across N frames sent
+    as a multi-image sequence (motion direction, color transition, frame
+    counter, shape appearance). Originally scoped as a video suite, but
+    OVMS does not accept `type: video` / `type: video_url` content via
+    /v3/chat/completions — it returns "Unsupported content type" from the
+    LLMExecutor calculator. Frame-sequence is the practical equivalent
+    (most "video" VLM benchmarks sample N frames anyway).
 
 Each suite produces an accuracy score (correct/total). Results go to
 results/vlm/<short_name>_<unix_ts>.json. Restores prior model on exit.
@@ -415,6 +425,140 @@ def bench_layout(model_id):
     return {"correct": correct, "total": len(tests), "pct": round(pct, 1), "details": details}
 
 
+def _gen_motion_frames(n_frames=4, direction="right", size=(256, 256),
+                       bg=(240, 240, 240), color=(40, 80, 200), r=30):
+    """N frames showing a dot moving in `direction`. Returns list of PNG bytes."""
+    from PIL import Image, ImageDraw
+    W, H = size
+    margin = 40
+    out = []
+    for i in range(n_frames):
+        t = i / max(1, n_frames - 1)
+        if direction == "right":
+            cx, cy = margin + t * (W - 2 * margin), H // 2
+        elif direction == "left":
+            cx, cy = (W - margin) - t * (W - 2 * margin), H // 2
+        elif direction == "down":
+            cx, cy = W // 2, margin + t * (H - 2 * margin)
+        elif direction == "up":
+            cx, cy = W // 2, (H - margin) - t * (H - 2 * margin)
+        img = Image.new("RGB", size, bg)
+        d = ImageDraw.Draw(img)
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=color)
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        out.append(buf.getvalue())
+    return out
+
+
+def _gen_color_transition_frames(colors, size=(256, 256), bg=(240, 240, 240), r=80):
+    """N frames showing a circle changing color through the given color sequence."""
+    from PIL import Image, ImageDraw
+    W, H = size
+    out = []
+    for c in colors:
+        img = Image.new("RGB", size, bg)
+        d = ImageDraw.Draw(img)
+        d.ellipse([W // 2 - r, H // 2 - r, W // 2 + r, H // 2 + r], fill=c)
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        out.append(buf.getvalue())
+    return out
+
+
+def _gen_counter_frames(numbers, size=(256, 256), bg=(255, 255, 255)):
+    """N frames each showing a single large number centered."""
+    from PIL import Image, ImageDraw, ImageFont
+    out = []
+    font = None
+    for f in ("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+              "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"):
+        if os.path.exists(f):
+            try:
+                font = ImageFont.truetype(f, 128)
+                break
+            except Exception:
+                pass
+    if font is None:
+        font = ImageFont.load_default()
+    for n in numbers:
+        img = Image.new("RGB", size, bg)
+        d = ImageDraw.Draw(img)
+        text = str(n)
+        bbox = d.textbbox((0, 0), text, font=font)
+        tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+        d.text(((size[0] - tw) / 2 - bbox[0], (size[1] - th) / 2 - bbox[1]),
+               text, fill=(20, 20, 20), font=font)
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        out.append(buf.getvalue())
+    return out
+
+
+def _gen_appearance_frames(appear_shape, appear_at=2, n_frames=4,
+                           size=(256, 256), bg=(245, 245, 245)):
+    """N frames where `appear_shape` is absent in frame 0 then visible from `appear_at` onward."""
+    from PIL import Image, ImageDraw
+    W, H = size
+    out = []
+    static = [("circle", (200, 40, 40), (80, 80), 30)]
+    for i in range(n_frames):
+        img = Image.new("RGB", size, bg)
+        d = ImageDraw.Draw(img)
+        for shape, color, (cx, cy), r in static:
+            _draw_shape(d, cx, cy, shape, r, color)
+        if i >= appear_at:
+            _draw_shape(d, W - 80, H - 80, appear_shape, 30, (40, 100, 200))
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        out.append(buf.getvalue())
+    return out
+
+
+def bench_frames(model_id):
+    """Temporal reasoning across a sequence of frames (multi-image proxy for video,
+    since OVMS does not accept type=video content as of 2026-06-14)."""
+    print("  [frames]")
+    tests = [
+        {"frames": _gen_motion_frames(4, "right"),
+         "q": "These are 4 frames of a short video, in order. Which direction does the dot move?",
+         "expected": ["right"]},
+        {"frames": _gen_motion_frames(4, "down"),
+         "q": "These are 4 frames of a short video, in order. Which direction does the dot move?",
+         "expected": ["down"]},
+        {"frames": _gen_color_transition_frames([(220, 30, 30), (220, 110, 30), (220, 180, 30), (220, 220, 30)]),
+         "q": "These are 4 frames of a short video, in order. What color does the circle end up as in the last frame?",
+         "expected": ["yellow"]},
+        {"frames": _gen_counter_frames([1, 2, 5, 9]),
+         "q": "These are 4 frames of a short video, in order. What is the highest number shown across all frames?",
+         "expected": ["9", "nine"]},
+        {"frames": _gen_appearance_frames("star", appear_at=2),
+         "q": "These are 4 frames of a short video, in order. A new shape appears partway through. What shape?",
+         "expected": ["star"]},
+    ]
+    correct = 0
+    details = []
+    override = int(os.environ.get("BENCH_VLM_MAX_TOKENS", "0") or "0")
+    for i, t in enumerate(tests):
+        try:
+            r_resp = _chat_with_images(model_id, t["q"], t["frames"],
+                                       max_tokens=(override or 400))
+        except Exception as e:
+            details.append({"i": i, "ok": False, "error": str(e)})
+            print(f"    test {i}: ERROR {e}")
+            continue
+        ok = _grade_keyword(r_resp["content"], t["expected"])
+        correct += int(ok)
+        final = _extract_final_answer(r_resp["content"]).replace("\n", " ")[:80]
+        details.append({"i": i, "expected": t["expected"], "ok": ok,
+                        "final_extract": final,
+                        "response": (r_resp["content"] or "").replace("\n", " ")[:500]})
+        print(f"    test {i} ({len(t['frames'])} frames): {'PASS' if ok else 'FAIL'}  final=\"{final}\"")
+    pct = 100 * correct / len(tests)
+    print(f"    -> {correct}/{len(tests)} = {pct:.1f}%")
+    return {"correct": correct, "total": len(tests), "pct": round(pct, 1), "details": details}
+
+
 def bench_diff(model_id):
     """Multi-image suite: present two near-identical scenes and ask what changed."""
     print("  [diff]")
@@ -483,6 +627,7 @@ SUITES = [
     ("chart", bench_chart),
     ("layout", bench_layout),
     ("diff", bench_diff),
+    ("frames", bench_frames),
 ]
 
 
