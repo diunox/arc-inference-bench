@@ -22,6 +22,18 @@ v1.1 (2026-06-14):
     the answer cleanly.
   - Multi-image input via _chat_with_images for the new diff suite.
 
+v1.2 (2026-06-14):
+  - Grader now strips the <think>...</think> reasoning block before
+    extraction — Qwen3.5 and similar models wrap CoT in those tags and
+    emit the actual answer only AFTER </think>. The v1.1 regex was
+    matching "answer:" mentions inside the CoT and capturing markup
+    instead of the real answer.
+  - Default max_tokens raised to 256 (single-image) / 320 (multi-image)
+    so CoT-heavy models have room to finish reasoning before OVMS hits
+    the length limit. Was 80/120 — way too tight for <think> models.
+  - Stored response snippet in details bumped from 50/80 to 500 chars
+    so post-mortem debugging actually shows the model's output.
+
 Each suite produces an accuracy score (correct/total). Results go to
 results/vlm/<short_name>_<unix_ts>.json. Restores prior model on exit.
 """
@@ -231,13 +243,26 @@ _BOXED = re.compile(r'\\boxed\{([^}]+)\}')
 def _extract_final_answer(content):
     """Best-effort extraction of the final answer from a (possibly CoT-prefixed) response.
 
-    Tries, in order: \\boxed{X}, **X** trailing, "Answer: X" / "the answer is X",
+    For models that wrap reasoning in <think>...</think> blocks (e.g. Qwen3.5),
+    everything BEFORE the last </think> is reasoning — only what follows is the
+    real answer. Strip that first so later heuristics don't false-positive on
+    in-CoT phrases like "the answer is".
+
+    Then try, in order: \\boxed{X}, **X** trailing, "Answer: X" / "the answer is X",
     last non-empty sentence. Returns the cleaned candidate (still lowercased
     by the caller). Empty string on no signal.
     """
     c = (content or "").strip()
     if not c:
         return ""
+    # Drop the reasoning block: keep only what comes after the last </think>.
+    think_end = c.rfind("</think>")
+    if think_end >= 0:
+        c = c[think_end + len("</think>"):].strip()
+        # If the model emitted </think> with nothing useful after, give up — let
+        # the caller fall back to whole-content scan rather than returning "".
+        if not c:
+            return ""
     m = _BOXED.search(c)
     if m:
         return m.group(1).strip()
@@ -246,7 +271,6 @@ def _extract_final_answer(content):
         return m.group(1).strip()
     m = _ANSWER_PREFIX.search(c)
     if m:
-        # Take the answer-prefix candidate but cap at one sentence
         cand = m.group(1).strip().rstrip(".!?,;:")
         if cand:
             return cand
@@ -299,10 +323,10 @@ def bench_count(model_id):
         png = _gen_count_scene(t["n"])
         r = _chat_with_image(model_id,
             "How many dots are in this image? Answer with just the number.",
-            png, max_tokens=80)
+            png, max_tokens=256)
         ok = _grade_keyword(r["content"], t["expected"])
         correct += int(ok)
-        snippet = (r["content"] or "").strip().replace("\n", " ")[:50]
+        snippet = (r["content"] or "").strip().replace("\n", " ")[:500]
         details.append({"n": t["n"], "ok": ok, "response": snippet})
         print(f"    n={t['n']}: {'PASS' if ok else 'FAIL'}  \"{snippet}\"")
     pct = 100 * correct / len(tests)
@@ -324,10 +348,10 @@ def bench_spatial(model_id):
         png = _gen_spatial_scene(left, right)
         r = _chat_with_image(model_id,
             f"This image has two shapes. What shape is on the {ask}? Answer with just the shape name.",
-            png, max_tokens=80)
+            png, max_tokens=256)
         ok = _grade_keyword(r["content"], exp)
         correct += int(ok)
-        snippet = (r["content"] or "").strip().replace("\n", " ")[:50]
+        snippet = (r["content"] or "").strip().replace("\n", " ")[:500]
         details.append({"left": left, "right": right, "ask": ask, "ok": ok, "response": snippet})
         print(f"    {left}|{right} ask_{ask}: {'PASS' if ok else 'FAIL'}  \"{snippet}\"")
     pct = 100 * correct / len(tests)
@@ -352,10 +376,10 @@ def bench_chart(model_id):
     details = []
     for t in tests:
         png = _gen_bar_chart(t["labels"], t["values"])
-        r = _chat_with_image(model_id, t["q"], png, max_tokens=80)
+        r = _chat_with_image(model_id, t["q"], png, max_tokens=256)
         ok = _grade_keyword(r["content"], t["expected"])
         correct += int(ok)
-        snippet = (r["content"] or "").strip().replace("\n", " ")[:50]
+        snippet = (r["content"] or "").strip().replace("\n", " ")[:500]
         details.append({"q": t["q"][:40], "ok": ok, "response": snippet})
         print(f"    {t['q'][:48]}: {'PASS' if ok else 'FAIL'}  \"{snippet}\"")
     pct = 100 * correct / len(tests)
@@ -380,10 +404,10 @@ def bench_layout(model_id):
     details = []
     for t in tests:
         png = _gen_multi_line_text(t["lines"])
-        r = _chat_with_image(model_id, t["q"], png, max_tokens=80)
+        r = _chat_with_image(model_id, t["q"], png, max_tokens=256)
         ok = _grade_keyword(r["content"], t["expected"])
         correct += int(ok)
-        snippet = (r["content"] or "").strip().replace("\n", " ")[:50]
+        snippet = (r["content"] or "").strip().replace("\n", " ")[:500]
         details.append({"lines": t["lines"], "q": t["q"], "ok": ok, "response": snippet})
         print(f"    {t['q'][:48]}: {'PASS' if ok else 'FAIL'}  \"{snippet}\"")
     pct = 100 * correct / len(tests)
@@ -434,7 +458,7 @@ def bench_diff(model_id):
         try:
             override = int(os.environ.get("BENCH_VLM_MAX_TOKENS", "0") or "0")
             r_resp = _chat_with_images(model_id, t["q"], t["imgs"],
-                                       max_tokens=(override or 120))
+                                       max_tokens=(override or 320))
         except Exception as e:
             details.append({"i": i, "ok": False, "error": str(e)})
             print(f"    test {i}: ERROR {e}")
@@ -444,7 +468,7 @@ def bench_diff(model_id):
         final = _extract_final_answer(r_resp["content"]).replace("\n", " ")[:60]
         details.append({"i": i, "expected": t["expected"], "ok": ok,
                         "final_extract": final,
-                        "response": (r_resp["content"] or "").replace("\n", " ")[:80]})
+                        "response": (r_resp["content"] or "").replace("\n", " ")[:500]})
         print(f"    test {i}: {'PASS' if ok else 'FAIL'}  final=\"{final}\"")
     pct = 100 * correct / len(tests)
     print(f"    -> {correct}/{len(tests)} = {pct:.1f}%")
