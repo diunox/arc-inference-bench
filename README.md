@@ -297,3 +297,37 @@ Generation speed (tok/s) at increasing context lengths. Fixed 128 output tokens 
 - Response length alone doesn't indicate quality; the raw outputs need human evaluation
 
 *Tested 2026-03-16 on Intel Arc A770 16GB. All models via OpenVINO OVMS with INT4 quantization.*
+
+---
+
+## Cross-model & VLM bench tooling (added 2026-06-14)
+
+The original `scripts/` benches compare **one model on SYCL vs OpenVINO**. To do **cross-model comparisons** (the data in the results table above), and to bench **vision-language models**, this repo now also ships:
+
+| Script | Purpose |
+|--------|---------|
+| `bench_compare.py` | Cross-model bench against OVMS: throughput sweep, TTFT, long-context, prompt processing, 10 verifiable-correctness suites (GSM8K, code, RAG, needle, etc.), and an auto-detected multimodal suite |
+| `compare_runs.py` | Reads `results/compare/*.json` and emits a markdown comparison table across all runs |
+| `bench_and_notify.sh` | Wrapper: runs `bench_compare.py`, then `compare_runs.py`, then posts a truncated summary to Telegram |
+| `bench_vlm.py` | VLM-specific bench, 4 suites (count, spatial, chart, layout) with programmatically-generated PIL test images |
+| `bench_vlm_and_notify.sh` | Same Telegram wrapper for the VLM bench |
+
+### Multimodal auto-detection
+
+`bench_compare.py` and `bench_vlm.py` decide whether to run vision suites by checking for an `openvino_vision_embeddings_model.bin` file inside the model directory (definitive signal). Name-based hints (`gemma-3`, `qwen2.5-vl`, `qwen3.5`, `llava`, etc.) are kept as a fallback when the model isn't on disk yet.
+
+### Usage
+
+```bash
+# One-off cross-model bench
+python3 bench_compare.py OpenVINO/gemma-3-12b-it-int4-ov OpenVINO/Qwen3-14B-int4-ov
+
+# Or with Telegram summary
+cp .env.example .env  # fill in TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
+./bench_and_notify.sh OpenVINO/gemma-3-12b-it-int4-ov
+
+# VLM bench (auto-skips text-only models)
+./bench_vlm_and_notify.sh OpenVINO/gemma-3-12b-it-int4-ov OpenVINO/Qwen3.5-9B-int4-ov
+```
+
+Both bench scripts talk to OVMS at `http://localhost:8000/v3` and a small model-switcher service at `:3005` that recreates the OVMS container with the right `--source_model` and `--cache_size` per request. The model-switcher is not in this repo (it's wired into the deployment-side `docker-compose.yml`); see your OVMS deployment for an equivalent.

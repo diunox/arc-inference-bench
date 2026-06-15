@@ -1,3 +1,13 @@
 openvino-models/
 *.json
 !results/*.json
+.env
+__pycache__/
+*.bak-*
+*.bak.*
+*.v1
+*.v2
+images/
+prompts/
+results/compare/
+results/vlm/
