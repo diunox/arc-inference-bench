@@ -12,17 +12,29 @@ Suites:
   spatial  : relative position reasoning (4 two-shape scenes)
   chart    : bar chart comprehension (3 charts)
   layout   : multi-line text + numeric extraction (3 documents)
+  diff     : multi-image difference detection (3 paired scenes) [v1.1]
+
+v1.1 (2026-06-14):
+  - Grader now extracts the final answer from CoT-prefixed responses
+    (recognises \\boxed{X}, **X**, "Answer: X", or the trailing sentence)
+    before substring-matching. Reduces false positives where a CoT model
+    mentions the expected token inside its reasoning but never delivers
+    the answer cleanly.
+  - Multi-image input via _chat_with_images for the new diff suite.
 
 Each suite produces an accuracy score (correct/total). Results go to
 results/vlm/<short_name>_<unix_ts>.json. Restores prior model on exit.
 """
 
+import base64
 import io
 import json
 import math
 import os
+import re
 import sys
 import time
+import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from bench_compare import (
@@ -39,14 +51,15 @@ SYSTEM_PROMPT = (
 )
 
 
-def _chat_with_image(model_id, prompt, png_bytes, max_tokens=80):
+def _chat_with_images(model_id, prompt, pngs, max_tokens=80):
+    """Send one prompt + N images to the chat endpoint. pngs is a list of bytes."""
     import time as _t
+    content = [{"type": "text", "text": prompt}]
+    for png in pngs:
+        content.append({"type": "image_url", "image_url": {"url": _data_uri(png)}})
     msgs = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": [
-            {"type": "text", "text": prompt},
-            {"type": "image_url", "image_url": {"url": _data_uri(png_bytes)}},
-        ]},
+        {"role": "user", "content": content},
     ]
     t0 = _t.monotonic()
     resp = api_post(LLM_URL + "/v3/chat/completions", {
@@ -58,6 +71,14 @@ def _chat_with_image(model_id, prompt, png_bytes, max_tokens=80):
         "usage": resp.get("usage", {}),
         "elapsed_s": _t.monotonic() - t0,
     }
+
+
+def _chat_with_image(model_id, prompt, png_bytes, max_tokens=80):
+    """Back-compat single-image wrapper. Honors BENCH_VLM_MAX_TOKENS env override."""
+    override = int(os.environ.get("BENCH_VLM_MAX_TOKENS", "0") or "0")
+    if override:
+        max_tokens = override
+    return _chat_with_images(model_id, prompt, [png_bytes], max_tokens=max_tokens)
 
 RESULTS_DIR = "results/vlm"
 
@@ -159,6 +180,18 @@ def _gen_bar_chart(labels, values, size=(512, 384)):
     return buf.getvalue()
 
 
+def _gen_scene(shapes, size=(384, 384), bg=(245, 245, 245)):
+    """shapes is a list of (shape_name, color_rgb, (cx, cy), r). Renders to PNG bytes."""
+    from PIL import Image, ImageDraw
+    img = Image.new("RGB", size, bg)
+    d = ImageDraw.Draw(img)
+    for shape, color, (cx, cy), r in shapes:
+        _draw_shape(d, cx, cy, shape, r, color)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
+
+
 def _gen_multi_line_text(lines, size=(640, 360)):
     from PIL import Image, ImageDraw, ImageFont
     img = Image.new("RGB", size, (255, 255, 255))
@@ -187,12 +220,67 @@ def _gen_multi_line_text(lines, size=(640, 360)):
 
 # ----- grader -----
 
+_BOLDED_FINAL = re.compile(r'\*\*([^*\n]{1,80})\*\*\s*\.?\s*$')
+_ANSWER_PREFIX = re.compile(
+    r'(?:the\s+)?(?:final\s+)?answer(?:\s+is)?\s*[:\-]?\s*(.+?)(?:\.|$|\n)',
+    re.IGNORECASE,
+)
+_BOXED = re.compile(r'\\boxed\{([^}]+)\}')
+
+
+def _extract_final_answer(content):
+    """Best-effort extraction of the final answer from a (possibly CoT-prefixed) response.
+
+    Tries, in order: \\boxed{X}, **X** trailing, "Answer: X" / "the answer is X",
+    last non-empty sentence. Returns the cleaned candidate (still lowercased
+    by the caller). Empty string on no signal.
+    """
+    c = (content or "").strip()
+    if not c:
+        return ""
+    m = _BOXED.search(c)
+    if m:
+        return m.group(1).strip()
+    m = _BOLDED_FINAL.search(c)
+    if m:
+        return m.group(1).strip()
+    m = _ANSWER_PREFIX.search(c)
+    if m:
+        # Take the answer-prefix candidate but cap at one sentence
+        cand = m.group(1).strip().rstrip(".!?,;:")
+        if cand:
+            return cand
+    lines = [l.strip() for l in c.split("\n") if l.strip()]
+    if not lines:
+        return c
+    last_line = lines[-1]
+    sentences = re.split(r'(?<=[.!?])\s+', last_line)
+    return (sentences[-1] if sentences else last_line).strip().rstrip(".!?,;:")
+
+
 def _grade_keyword(content, expected_any):
-    c = (content or "").lower().strip().rstrip(".!?,;:")
+    """v1.1 grader: prefers the extracted final answer over whole-content substring.
+
+    Pass conditions (any one is enough):
+      - Final-answer extract exactly equals an expected token (after lower/strip).
+      - Final-answer extract contains an expected token as substring.
+    If the final-answer extract is empty (model returned nothing useful), fall
+    back to whole-content substring as a last resort.
+    """
     expected_lower = [e.lower().strip() for e in expected_any]
-    if c in expected_lower:
+    final = _extract_final_answer(content).lower().strip().rstrip(".!?,;:")
+    if final:
+        if final in expected_lower:
+            return True
+        if any(e in final for e in expected_lower):
+            return True
+        return False  # strict: extraction found something but it didn't match
+    # Last resort: substring on whole response (e.g. very terse models that
+    # returned just one token without punctuation/structure to extract)
+    raw = (content or "").lower().strip().rstrip(".!?,;:")
+    if raw in expected_lower:
         return True
-    return any(e in c for e in expected_lower)
+    return any(e in raw for e in expected_lower)
 
 
 # ----- suites -----
@@ -303,6 +391,66 @@ def bench_layout(model_id):
     return {"correct": correct, "total": len(tests), "pct": round(pct, 1), "details": details}
 
 
+def bench_diff(model_id):
+    """Multi-image suite: present two near-identical scenes and ask what changed."""
+    print("  [diff]")
+    R, G, B, Y = (200, 40, 40), (40, 160, 70), (40, 100, 200), (220, 200, 40)
+    r = 45
+    # 1. Color change: blue dot in img1 becomes yellow in img2
+    img1a = _gen_scene([("circle", R, (100, 120), r),
+                        ("circle", G, (260, 120), r),
+                        ("circle", B, (180, 260), r)])
+    img2a = _gen_scene([("circle", R, (100, 120), r),
+                        ("circle", G, (260, 120), r),
+                        ("circle", Y, (180, 260), r)])
+    # 2. Added shape: triangle appears in img2
+    img1b = _gen_scene([("square", R, (120, 180), r),
+                        ("circle", B, (260, 180), r)])
+    img2b = _gen_scene([("square", R, (120, 180), r),
+                        ("circle", B, (260, 180), r),
+                        ("triangle", G, (190, 320), r)])
+    # 3. Removed shape: star is in img1 but not img2
+    img1c = _gen_scene([("circle", R, (90, 100), r),
+                        ("square", B, (290, 100), r),
+                        ("star", Y, (90, 280), r),
+                        ("triangle", G, (290, 280), r)])
+    img2c = _gen_scene([("circle", R, (90, 100), r),
+                        ("square", B, (290, 100), r),
+                        ("triangle", G, (290, 280), r)])
+    tests = [
+        {"imgs": [img1a, img2a],
+         "q": "These are two images. What is different about the second image compared to the first? Be brief.",
+         "expected": ["yellow", "color", "blue"]},
+        {"imgs": [img1b, img2b],
+         "q": "These are two images. What is different about the second image compared to the first? Be brief.",
+         "expected": ["triangle", "added", "extra", "new shape"]},
+        {"imgs": [img1c, img2c],
+         "q": "These are two images. What is different about the second image compared to the first? Be brief.",
+         "expected": ["star", "missing", "removed"]},
+    ]
+    correct = 0
+    details = []
+    for i, t in enumerate(tests):
+        try:
+            override = int(os.environ.get("BENCH_VLM_MAX_TOKENS", "0") or "0")
+            r_resp = _chat_with_images(model_id, t["q"], t["imgs"],
+                                       max_tokens=(override or 120))
+        except Exception as e:
+            details.append({"i": i, "ok": False, "error": str(e)})
+            print(f"    test {i}: ERROR {e}")
+            continue
+        ok = _grade_keyword(r_resp["content"], t["expected"])
+        correct += int(ok)
+        final = _extract_final_answer(r_resp["content"]).replace("\n", " ")[:60]
+        details.append({"i": i, "expected": t["expected"], "ok": ok,
+                        "final_extract": final,
+                        "response": (r_resp["content"] or "").replace("\n", " ")[:80]})
+        print(f"    test {i}: {'PASS' if ok else 'FAIL'}  final=\"{final}\"")
+    pct = 100 * correct / len(tests)
+    print(f"    -> {correct}/{len(tests)} = {pct:.1f}%")
+    return {"correct": correct, "total": len(tests), "pct": round(pct, 1), "details": details}
+
+
 # ----- driver -----
 
 SUITES = [
@@ -310,6 +458,7 @@ SUITES = [
     ("spatial", bench_spatial),
     ("chart", bench_chart),
     ("layout", bench_layout),
+    ("diff", bench_diff),
 ]
 
 
