@@ -279,16 +279,22 @@ NUMERIC_PROMPT = ("Solve the problem step by step. After your reasoning, "
                   "write your final numerical answer on its own line as: ANSWER: <number>")
 
 def _strip_think(text):
-    """Strip <think>...</think> reasoning blocks (Qwen3 etc). Handles:
-       - Standard closed blocks
+    """Strip <think>...</think> reasoning blocks (Qwen3, Qwen3.5, R1, etc). Handles:
+       - Standard closed blocks <think>...</think>
+       - Missing-open-tag: some models (Qwen3.5) emit reasoning naked then close
+         with only </think>. We treat everything up to and including the last
+         </think> as reasoning and keep only what comes after.
        - Unclosed <think> at start (model ran out of tokens mid-think)
        - Multiple think blocks
     """
     if not text:
         return ""
-    # Closed blocks first
+    # 1. Standard closed pairs first
     text = re.sub(r"<think>.*?</think>\s*", "", text, flags=re.DOTALL)
-    # Any remaining unclosed <think> consumes the rest (model truncated)
+    # 2. Missing-open-tag: a bare </think> means everything before it was reasoning
+    if "</think>" in text:
+        text = text.rsplit("</think>", 1)[1]
+    # 3. Any unclosed <think> consumes the rest (model truncated mid-reasoning)
     text = re.sub(r"<think>.*$", "", text, flags=re.DOTALL)
     return text.strip()
 
