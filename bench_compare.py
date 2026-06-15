@@ -299,12 +299,30 @@ def _strip_think(text):
     return text.strip()
 
 def _extract_number(text):
-    text = _strip_think(text)
-    # Prefer the LAST ANSWER: occurrence (some models say ANSWER: X mid-reasoning)
-    matches = list(re.finditer(r"ANSWER:\s*\$?\s*([-+]?\d+(?:\.\d+)?)", text, re.IGNORECASE))
+    """Extract a numeric answer, trying multiple sources from cleanest to fallback.
+
+    For models that wrap reasoning in <think>...</think> (or emit a bare </think>),
+    the final ANSWER: line can land either AFTER the closing tag (clean) or
+    INSIDE the reasoning (when the model emits ANSWER: as part of its think then
+    just stops). We try both surfaces before falling back to "last number".
+    """
+    raw = text or ""
+    stripped = _strip_think(raw)
+    answer_re = re.compile(r"ANSWER:\s*\$?\s*([-+]?\d+(?:\.\d+)?)", re.IGNORECASE)
+    # 1. ANSWER: pattern in post-think content (cleanest)
+    matches = list(answer_re.finditer(stripped))
     if matches:
         return float(matches[-1].group(1))
-    nums = re.findall(r"[-+]?\d+(?:\.\d+)?", text)
+    # 2. ANSWER: pattern in raw — catches "ANSWER: X" emitted inside the think block
+    matches = list(answer_re.finditer(raw))
+    if matches:
+        return float(matches[-1].group(1))
+    # 3. Last bare number in post-think (gemma-style no-CoT case)
+    nums = re.findall(r"[-+]?\d+(?:\.\d+)?", stripped)
+    if nums:
+        return float(nums[-1])
+    # 4. Final fallback: last number anywhere
+    nums = re.findall(r"[-+]?\d+(?:\.\d+)?", raw)
     return float(nums[-1]) if nums else None
 
 def bench_gsm8k(model_id):
